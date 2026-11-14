@@ -3,7 +3,9 @@
 Both panels were measured on the **same live floor at the same time**: the rig's API, with the
 factory simulator answering for the engine and the worker (see [README.md](README.md)). The default
 panel was opened at `http://127.0.0.1:8790/`, served by the API exactly as it ships; panel-next at
-`http://127.0.0.1:5173/`. `node scripts/compare.mjs` repeats every measurement below.
+`http://127.0.0.1:5173/`. `node scripts/compare.mjs` repeats every measurement below; the figures
+here are one run of it, each page watched for 60 s after it settled. The axe counts move a little
+with what is on the floor at that moment, because they count elements.
 
 ## What it looks like
 
@@ -17,13 +19,13 @@ panel was opened at `http://127.0.0.1:8790/`, served by the API exactly as it sh
 
 | | the default panel | panel-next |
 |---|---|---|
-| API requests in a minute of steady state, on the floor | **48** — `/api/floor` 32, coordinator 10, inbox 4, jobs 2 | **2** — the tech lead's narration, a 30 s backstop |
-| … on a line's page | **18** | **2** |
+| API requests in a minute of steady state, on the floor | **51** — `/api/floor` 33, coordinator 10, inbox 4, jobs 3, budget 1 | **2** — the tech lead's narration, a 30 s backstop |
+| … on a line's page | **23** — coordinator 10, inbox 4, jobs 3, the line's floor 3, and 3 more | **2** |
 | why | fixed timers (6 s, 15 s, 20 s, 60 s) run whatever the streams do, and every engine frame re-reads the floor | streams write into the cache; the reads the server derives from the jobs are asked once per change; timers run only while a stream is down |
 | what needs you, after it changes | on the next 15 s inbox poll | asked again on the engine frame that changed it |
-| axe, serious and critical, the floor | colour contrast ×11, label/name mismatch ×5 | none |
-| axe, a line's page | colour contrast ×8, label/name mismatch ×1 | none |
-| what loads first | one 408 KB file (131 KB gzip): every surface's code and styles | 138 KB gzip of JavaScript and 6.5 KB of CSS for the floor; the board, logs, costs and product room load when opened (5–19 KB gzip each); the ⌘K bar and the motion engine load after the first paint |
+| axe, serious and critical, the floor | colour contrast ×12, label/name mismatch ×5 | none |
+| axe, a line's page | colour contrast ×6, label/name mismatch ×1 | none |
+| what loads first | one 408 KB file (131 KB gzip): every surface's code and styles | 140 KB gzip of JavaScript, 7 KB of CSS and the bundled font (90 KB, Latin) for the floor — more than the default page on a first visit, cached after it; the board, logs, costs and product room load when opened (5–19 KB gzip each); the ⌘K bar and the motion engine load after the first paint |
 | requests to another host | Chart.js from a CDN when the cost dashboard opens | none — the font is bundled and served with the page; charts are drawn in SVG |
 | phone, 320–414 px | the floor fits; the confirm dialog is wider than a 375 px screen | no horizontal overflow on any page (end-to-end checked) |
 

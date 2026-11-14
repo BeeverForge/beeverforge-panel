@@ -10,7 +10,8 @@
     border-color: color-mix(in srgb, var(--plate-text) 70%, transparent);
     color: var(--plate-text);
   }
-  .row[data-plate="true"] button:hover:not(:disabled) {
+  /* The filled answer keeps its fill on hover: only the outline answers take the wash. */
+  .row[data-plate="true"] button:not([class*="primary"]):hover:not(:disabled) {
     background: color-mix(in srgb, var(--plate-text) 14%, transparent);
     border-color: var(--plate-text);
   }
@@ -18,6 +19,9 @@
     background: var(--plate-text);
     border-color: var(--plate-text);
     color: var(--plate);
+  }
+  .row[data-plate="true"] button[class*="primary"]:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--plate-text) 94%, var(--plate));
   }
   .row[data-plate="true"] button[class*="quiet"] {
     border-color: transparent;

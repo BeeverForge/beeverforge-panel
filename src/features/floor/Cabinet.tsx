@@ -140,10 +140,17 @@ function LineRow({ line, stream, reduce }: { line: Line; stream: boolean; reduce
   }
 
   // A held card keeps its own slot; what it asks opens beneath the stations, notched under it.
+  // Only the oldest ask turns over to the full red plate; every other one is a single strip, so
+  // the whole cabinet and the plate stay in one screen.
   if (held) {
+    const atLabel = stations[position!.at]?.label ?? "the start";
     cells.push(
       <div key="plate" className={s.drawer} style={{ "--notch": (atCol + 0.5) / STATIONS.length } as React.CSSProperties}>
-        <Plate line={line} kind={kind!} atLabel={stations[position!.at]?.label ?? "the start"} events={events} reduce={reduce} />
+        {line.first ? (
+          <Plate line={line} kind={kind!} atLabel={atLabel} events={events} reduce={reduce} />
+        ) : (
+          <Strip line={line} kind={kind!} atLabel={atLabel} events={events} reduce={reduce} />
+        )}
       </div>,
     );
   }
@@ -268,9 +275,7 @@ function Card({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22 }}
         >
-          {held && kind ? (
-            <span className={s.heldLine}>{KICKER[kind]} · answer below</span>
-          ) : paused ? (
+          {held ? null : paused ? (
             <span className={s.pausedLine}>
               <Icon name="clock" size={11} /> paused — retries by itself
             </span>
@@ -308,17 +313,13 @@ function Plate({ line, kind, atLabel, events, reduce }: { line: Line; kind: NonN
   const now = useNow();
   const waited = waitedFrom(line.need?.parked_at ?? job.action?.parked_at, events);
   const review = line.need?.review;
-  // Only the oldest ask is turned over to red; the rest wait on their stock with a red band, so
-  // the reversed plate always means "this one first".
-  const reversed = line.first;
   return (
     <m.article
       initial={reduce ? false : { rotateX: -70, opacity: 0.6 }}
       animate={{ rotateX: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className={s.plate}
-      data-reversed={reversed}
-      aria-label={`#${job.issue} needs you${reversed ? " first" : ""}: ${KICKER[kind]}`}
+      aria-label={`#${job.issue} needs you first: ${KICKER[kind]}`}
     >
       <div className={s.plateTop}>
         <span>
@@ -334,7 +335,34 @@ function Plate({ line, kind, atLabel, events, reduce }: { line: Line; kind: NonN
           {capitalise(review.clause)}
         </p>
       )}
-      <Answers project={line.name} issue={job.issue ?? ""} kind={kind} need={line.need} job={job} onPlate={reversed} />
+      <Answers project={line.name} issue={job.issue ?? ""} kind={kind} need={line.need} job={job} onPlate />
+    </m.article>
+  );
+}
+
+/** An ask waiting its turn: one line on the card's own stock — what, how long, the answers. */
+function Strip({ line, kind, atLabel, events, reduce }: { line: Line; kind: NonNullable<ReturnType<typeof kindOf>>; atLabel: string; events: JournalEvent[]; reduce: boolean }) {
+  const job = line.job!;
+  const now = useNow();
+  const waited = waitedFrom(line.need?.parked_at ?? job.action?.parked_at, events);
+  // A pull request the review did not approve says so beside its Merge button, in the server's words.
+  const review = line.need?.review;
+  const warning = kind === "merge" && review?.word && review.clause && review.level !== "ok" ? capitalise(review.clause) : "";
+  const question = warning || questionOf(kind, line.need, job);
+  return (
+    <m.article
+      initial={reduce ? false : { opacity: 0, y: -4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22 }}
+      className={s.strip}
+      aria-label={`#${job.issue} needs you: ${KICKER[kind]}, held at ${atLabel}`}
+    >
+      <p className={s.stripText} title={question} data-warn={Boolean(warning) || undefined}>
+        <b>{KICKER[kind]}</b>
+        {question}
+      </p>
+      <WaitedFor waited={waited} now={now} className={s.stripWhen} />
+      <Answers project={line.name} issue={job.issue ?? ""} kind={kind} need={line.need} job={job} />
     </m.article>
   );
 }

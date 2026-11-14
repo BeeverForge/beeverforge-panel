@@ -56,11 +56,15 @@ export function useProductConversation(project: string, room: boolean, session: 
   const [ready, setReady] = useState(false);
   const [refusal, setRefusal] = useState("");
   const ws = useRef<WebSocket | null>(null);
+  // What was said before this conversation was subscribed: shown at once, sent once it is.
+  const outbox = useRef<{ id: string; frame: string }[]>([]);
+  const subscribed = useRef(false);
 
   useEffect(() => {
     let tries = 0;
     let timer: number | undefined;
     let stopped = false;
+    subscribed.current = false;
     const subscribe = () => {
       const sock = ws.current;
       if (!sock || sock.readyState !== WebSocket.OPEN || !project) return;
@@ -87,12 +91,18 @@ export function useProductConversation(project: string, room: boolean, session: 
         switch (m.kind) {
           case "subscribed":
             break;
-          case "history":
-            setTurns(((m.turns as Record<string, unknown>[]) ?? []).map(fromTurn));
+          case "history": {
+            const queued = outbox.current;
+            outbox.current = [];
+            const waiting = new Set(queued.map((q) => q.id));
+            setTurns((prev) => [...((m.turns as Record<string, unknown>[]) ?? []).map(fromTurn), ...prev.filter((t) => waiting.has(t.id))]);
             setStaged((m.staged as Staged | null) ?? null);
             setEarlier(String(m.earlier ?? ""));
             setReady(true);
+            subscribed.current = true;
+            for (const q of queued) sock.send(q.frame);
             break;
+          }
           case "earlier":
             setTurns((t) => [...((m.turns as Record<string, unknown>[]) ?? []).map(fromTurn), ...t]);
             setEarlier(String(m.earlier ?? ""));
@@ -131,6 +141,7 @@ export function useProductConversation(project: string, room: boolean, session: 
         }
       };
       sock.onclose = () => {
+        subscribed.current = false;
         if (stopped) return;
         useLive.getState().set({ product: "reconnecting" });
         setPresence((p) => ({ ...p, state: "offline" }));
@@ -146,11 +157,12 @@ export function useProductConversation(project: string, room: boolean, session: 
   }, [project, room, session]);
 
   const say = useCallback((text: string, attachments: string[] = [], context?: Record<string, unknown>) => {
-    const sock = ws.current;
-    if (!sock || sock.readyState !== WebSocket.OPEN) return false;
     const id = mint();
+    const frame = JSON.stringify({ kind: "say", id, text, ...(attachments.length ? { attachments } : {}), ...(context ? { context } : {}) });
     setTurns((t) => [...t, { id, who: "person", speaker: "you", text, ts: new Date().toISOString(), mine: true, sending: true }]);
-    sock.send(JSON.stringify({ kind: "say", id, text, ...(attachments.length ? { attachments } : {}), ...(context ? { context } : {}) }));
+    const sock = ws.current;
+    if (sock && sock.readyState === WebSocket.OPEN && subscribed.current) sock.send(frame);
+    else outbox.current.push({ id, frame });
     return true;
   }, []);
 

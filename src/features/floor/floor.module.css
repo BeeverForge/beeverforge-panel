@@ -45,7 +45,7 @@
     min-height: 64px;
   }
   .row[data-held] {
-    grid-template-rows: minmax(140px, auto) auto;
+    grid-template-rows: minmax(104px, auto) auto;
   }
   .row[data-held] > .label {
     grid-row: span 2;
@@ -206,12 +206,12 @@
   .card[data-paused] {
     border-top-color: var(--clock);
   }
+  /* A held card is its number, its title and its wait: what it asks is right beneath it. */
   .card[data-held] {
     border-top-color: var(--plate);
   }
-  .heldLine {
-    color: var(--plate);
-    font-weight: 600;
+  .card[data-held] .cardTitle {
+    -webkit-line-clamp: 2;
   }
   .cardTop {
     display: flex;
@@ -340,47 +340,82 @@
     background: var(--plate);
     clip-path: polygon(50% 0, 100% 100%, 0 100%);
   }
-  /* Measured from inside its 5 px band, so it sits on the band rather than in it. */
-  .plate[data-reversed="false"]::before {
-    top: -13px;
-  }
   .plate:focus-within {
     box-shadow:
       var(--shadow-pop),
       0 0 0 2px color-mix(in srgb, var(--plate-text) 40%, transparent);
   }
-  /* Waiting its turn: the card's own stock, flagged with the red band. */
-  .plate[data-reversed="false"] {
+
+  /* ── an ask waiting its turn: one strip on the card's own stock, with a red band ─────── */
+  .strip {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 5px 8px 5px 12px;
     background: var(--card);
     color: var(--card-ink);
-    border-top: 5px solid var(--plate);
+    border-top: 3px solid var(--plate);
     border-radius: 0 0 var(--r-1) var(--r-1);
     box-shadow: 0 1px 0 rgb(0 0 0 / 0.25);
     font-stretch: var(--stock);
   }
-  .plate[data-reversed="false"] .plateWhen,
-  .plate[data-reversed="false"] .verdict {
-    color: var(--card-3);
+  /* Measured from inside its 3 px band, so it sits on the band rather than in it. */
+  .strip::before {
+    content: "";
+    position: absolute;
+    top: -11px;
+    left: clamp(8px, calc((100% + 12px) * var(--notch, 0.5) - 13px), calc(100% - 22px));
+    width: 14px;
+    height: 8px;
+    background: var(--plate);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
   }
-  .plate[data-reversed="false"] .plateTop b {
+  .stripText {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--t-13);
+    font-weight: 600;
+  }
+  .stripText b {
+    margin-right: 8px;
+    color: var(--plate);
+    font-weight: 700;
+  }
+  .stripText[data-warn] {
     color: var(--plate);
   }
-  .plate[data-reversed="false"] .question {
-    font-size: var(--t-14);
+  .stripWhen {
+    flex: none;
+    font-size: var(--t-12);
+    color: var(--card-3);
   }
-  .plate[data-reversed="false"] button {
+  .strip > div:last-child {
+    flex: none;
+    flex-wrap: nowrap;
+  }
+  .strip button {
     color: var(--card-ink);
     border-color: color-mix(in srgb, var(--card-ink) 35%, transparent);
   }
-  .plate[data-reversed="false"] button:hover:not(:disabled) {
+  /* The filled answer keeps its fill on hover: only the outline answers take the wash. */
+  .strip button:not([class*="primary"]):hover:not(:disabled) {
     background: color-mix(in srgb, var(--card-ink) 8%, transparent);
   }
-  .plate[data-reversed="false"] button[class*="primary"] {
+  .strip button[class*="primary"] {
     background: var(--card-ink);
     border-color: var(--card-ink);
     color: var(--card);
   }
-  .plate[data-reversed="false"] button[class*="quiet"] {
+  .strip button[class*="primary"]:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--card-ink) 84%, var(--card));
+  }
+  .strip button[class*="quiet"] {
     border-color: transparent;
     color: var(--card-2);
   }
@@ -480,8 +515,25 @@
       grid-column: auto;
       padding: 0 10px 10px;
     }
-    .plate::before {
+    /* The pips already say where a held card is; the ask itself is all the line needs to show. */
+    .row[data-held] .cell:has(> .card) {
       display: none;
+    }
+    .plate::before,
+    .strip::before {
+      display: none;
+    }
+    .strip {
+      flex-wrap: wrap;
+      padding: 8px 10px;
+      gap: 6px 10px;
+    }
+    .stripText {
+      flex-basis: calc(100% - 110px);
+      white-space: normal;
+    }
+    .strip > div:last-child {
+      flex-wrap: wrap;
     }
   }
 }

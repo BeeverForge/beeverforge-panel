@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T17:43:05Z",
+  "title": "Design System: BeeverForge Panel (panel-next)",
+  "extensions": {
+    "colorMeta": {
+      "brand-ink": { "role": "neutral", "displayName": "Brand Ink", "canonical": "#1f1f24", "lightTheme": "#1f1f24", "tonalRamp": ["#0b0b0c", "#242427", "#3f3f45", "#5d5d63", "#7c7c83", "#9e9ea4", "#c7c7cb", "#eeeef0"] },
+      "brand-cream": { "role": "neutral", "displayName": "Brand Cream", "canonical": "#faf9f6", "lightTheme": "#faf9f6", "tonalRamp": ["#0b0b0a", "#242422", "#40403d", "#5e5d5b", "#7e7d7a", "#9f9e9b", "#c8c7c5", "#eeeeee"] },
+      "brand-gold": { "role": "primary", "displayName": "Brand Gold", "canonical": "#d4a24c", "lightTheme": "#d4a24c", "tonalRamp": ["#120900", "#322001", "#553a00", "#7b5603", "#a3730f", "#c6953e", "#e4c28b", "#f7eddd"] },
+      "ground": { "role": "neutral", "displayName": "Night Floor", "canonical": "#151518", "lightTheme": "#f3f3f1", "tonalRamp": ["#0b0b0c", "#242426", "#3f3f43", "#5d5d61", "#7d7d81", "#9e9ea2", "#c7c7ca", "#eeeeef"] },
+      "cabinet": { "role": "neutral", "displayName": "Cabinet Ink", "canonical": "#1f1f24", "lightTheme": "#e7e6e2", "tonalRamp": ["#0b0b0c", "#242427", "#3f3f45", "#5d5d63", "#7c7c83", "#9e9ea4", "#c7c7cb", "#eeeef0"] },
+      "raised": { "role": "neutral", "displayName": "Raised Ink", "canonical": "#26262c", "lightTheme": "#ffffff", "tonalRamp": ["#0b0b0d", "#232428", "#3f3f45", "#5d5d64", "#7c7c84", "#9d9ea5", "#c7c7cc", "#eeeef0"] },
+      "rule": { "role": "neutral", "displayName": "Hairline", "canonical": "#2f2f37", "lightTheme": "#d3d2cc", "tonalRamp": ["#0b0b0d", "#232329", "#3f3f47", "#5d5d66", "#7c7c86", "#9d9da7", "#c6c6cd", "#eeeef0"] },
+      "slot": { "role": "neutral", "displayName": "Slot Edge", "canonical": "#3d3d46", "lightTheme": "#bdbcb5", "tonalRamp": ["#0b0b0d", "#232329", "#3f3f48", "#5c5d66", "#7c7c86", "#9d9da8", "#c6c6ce", "#eeeef0"] },
+      "rule-strong": { "role": "neutral", "displayName": "Strong Rule", "canonical": "#4a4a53", "lightTheme": "#a8a7a0", "tonalRamp": ["#0b0b0d", "#232329", "#3f3f47", "#5d5d66", "#7c7c86", "#9d9da8", "#c6c6ce", "#eeeef0"] },
+      "text": { "role": "neutral", "displayName": "Cream Print", "canonical": "#faf9f6", "lightTheme": "#1f1f24", "tonalRamp": ["#0b0b0a", "#242422", "#40403d", "#5e5d5b", "#7e7d7a", "#9f9e9b", "#c8c7c5", "#eeeeee"] },
+      "text-2": { "role": "neutral", "displayName": "Warm Grey", "canonical": "#b6b5af", "lightTheme": "#45444b", "tonalRamp": ["#0b0b0a", "#252421", "#41403b", "#5f5e58", "#7e7d78", "#9f9f99", "#c8c7c3", "#efeeed"] },
+      "text-3": { "role": "neutral", "displayName": "Muted Pewter", "canonical": "#8e8d95", "lightTheme": "#64636b", "tonalRamp": ["#0b0b0d", "#242328", "#403f46", "#5d5c64", "#7d7c84", "#9e9da5", "#c7c6cc", "#eeeef0"] },
+      "text-4": { "role": "neutral", "displayName": "Faint Pewter", "canonical": "#84838b", "lightTheme": "#6c6b72", "tonalRamp": ["#0b0b0d", "#242328", "#403f46", "#5d5c64", "#7d7c84", "#9e9da5", "#c7c6cc", "#eeeef0"] },
+      "card": { "role": "neutral", "displayName": "Card Stock", "canonical": "#faf9f6", "lightTheme": "#ffffff", "tonalRamp": ["#0b0b0a", "#242422", "#40403d", "#5e5d5b", "#7e7d7a", "#9f9e9b", "#c8c7c5", "#eeeeee"] },
+      "card-ink": { "role": "neutral", "displayName": "Black Print", "canonical": "#1f1f24", "lightTheme": "#1f1f24", "tonalRamp": ["#0b0b0c", "#242427", "#3f3f45", "#5d5d63", "#7c7c83", "#9e9ea4", "#c7c7cb", "#eeeef0"] },
+      "card-2": { "role": "neutral", "displayName": "Stock Grey", "canonical": "#4b4942", "lightTheme": "#45443e", "tonalRamp": ["#0c0b09", "#252420", "#424039", "#605e56", "#7f7d76", "#a19e96", "#c9c7c2", "#efeeed"] },
+      "card-3": { "role": "neutral", "displayName": "Stock Faint", "canonical": "#68665e", "lightTheme": "#66645c", "tonalRamp": ["#0c0b09", "#25241f", "#424038", "#605e56", "#7f7d75", "#a19e96", "#c9c7c1", "#efeeec"] },
+      "card-ok": { "role": "tertiary", "displayName": "Printed Green", "canonical": "#17713f", "lightTheme": "#146a3a", "tonalRamp": ["#001004", "#002d14", "#014d27", "#156f3e", "#3e915c", "#61b37d", "#a1d7b0", "#e4f3e7"] },
+      "run": { "role": "primary", "displayName": "Kanban Gold", "canonical": "#d4a24c", "lightTheme": "#8a5c16", "tonalRamp": ["#120900", "#322001", "#553a00", "#7b5603", "#a3730f", "#c6953e", "#e4c28b", "#f7eddd"] },
+      "ok": { "role": "tertiary", "displayName": "Tick Green", "canonical": "#3ddc84", "lightTheme": "#157a46", "tonalRamp": ["#001005", "#012d15", "#024d28", "#02703c", "#029652", "#02bd69", "#84dfa3", "#ddf6e4"] },
+      "ok-ink": { "role": "neutral", "displayName": "Tick Ink", "canonical": "#1f1f24", "lightTheme": "#ffffff", "tonalRamp": ["#0b0b0c", "#242427", "#3f3f45", "#5d5d63", "#7c7c83", "#9e9ea4", "#c7c7cb", "#eeeef0"] },
+      "ok-wash": { "role": "tertiary", "displayName": "Tick Wash", "canonical": "rgb(61 220 132 / 0.1)", "lightTheme": "rgb(21 122 70 / 0.1)", "tonalRamp": ["#001005", "#012d15", "#024d28", "#02703c", "#029652", "#02bd69", "#84dfa3", "#ddf6e4"] },
+      "alarm": { "role": "secondary", "displayName": "Signal Coral", "canonical": "#f0625a", "lightTheme": "#b3261e", "tonalRamp": ["#1e0001", "#4b0004", "#7c020d", "#ab1d20", "#d24641", "#f96a61", "#ffb0a7", "#fee9e6"] },
+      "alarm-wash": { "role": "secondary", "displayName": "Alarm Wash", "canonical": "rgb(240 98 90 / 0.12)", "lightTheme": "rgb(179 38 30 / 0.08)", "tonalRamp": ["#1e0001", "#4b0004", "#7c020d", "#ab1d20", "#d24641", "#f96a61", "#ffb0a7", "#fee9e6"] },
+      "plate": { "role": "secondary", "displayName": "Reversed-Plate Red", "canonical": "#c2372d", "lightTheme": "#b42d24", "tonalRamp": ["#1e0000", "#4b0001", "#7d0003", "#ab1d18", "#d2473b", "#f96b5c", "#feb1a5", "#fee9e6"] },
+      "plate-text": { "role": "neutral", "displayName": "Plate Cream", "canonical": "#faf9f6", "lightTheme": "#ffffff", "tonalRamp": ["#0b0b0a", "#242422", "#40403d", "#5e5d5b", "#7e7d7a", "#9f9e9b", "#c8c7c5", "#eeeeee"] },
+      "plate-2": { "role": "secondary", "displayName": "Plate Blush", "canonical": "#fdeeeb", "lightTheme": "#fbe3e0", "tonalRamp": ["#0d0a0a", "#292221", "#483d3a", "#675a58", "#877a77", "#a99b98", "#cfc5c3", "#f1eeed"] },
+      "clock": { "role": "tertiary", "displayName": "Pause Blue", "canonical": "#8fb4e8", "lightTheme": "#2d5fa8", "tonalRamp": ["#040b17", "#102440", "#20406c", "#3d5f8d", "#5c7fb0", "#7ca0d3", "#b0c9ed", "#e7effa"] },
+      "link": { "role": "tertiary", "displayName": "Link Blue", "canonical": "#72b6ff", "lightTheme": "#1d4ed8", "tonalRamp": ["#000b1c", "#002447", "#004076", "#185fa2", "#3d80c5", "#5fa3ea", "#9eccfe", "#e4f0fe"] },
+      "idle": { "role": "neutral", "displayName": "Idle Pewter", "canonical": "#6b6a72", "lightTheme": "#8a8990", "tonalRamp": ["#0b0b0d", "#242328", "#403f46", "#5d5c64", "#7d7c84", "#9e9da6", "#c7c6cc", "#eeeef0"] },
+      "focus": { "role": "tertiary", "displayName": "Focus Ring", "canonical": "#72b6ff", "lightTheme": "#1d4ed8", "tonalRamp": ["#000b1c", "#002447", "#004076", "#185fa2", "#3d80c5", "#5fa3ea", "#9eccfe", "#e4f0fe"] },
+      "scrim": { "role": "neutral", "displayName": "Scrim", "canonical": "rgb(10 10 12 / 0.62)", "lightTheme": "rgb(31 31 36 / 0.36)", "tonalRamp": ["#0b0b0c", "#242427", "#3f3f45", "#5d5d63", "#7c7c83", "#9e9ea4", "#c7c7cb", "#eeeef0"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The floor sentence (600) and page titles (700). Drops to 18px under 700px." },
+      "headline": { "displayName": "Headline", "purpose": "The live station's card title on the line page, the idle line's state word, section figures." },
+      "title": { "displayName": "Title", "purpose": "Section heads, dialog titles, the brand name, and the red plate's question." },
+      "subtitle": { "displayName": "Subtitle", "purpose": "Line names in the cabinet; the Needs you question at 400." },
+      "body": { "displayName": "Body", "purpose": "The interface default at 13px; notes and explanations open to 1.45-1.5 leading." },
+      "label": { "displayName": "Label", "purpose": "Buttons, state words, chip counts, field labels." },
+      "small": { "displayName": "Small", "purpose": "Times, freshness, census chips, secondary meta." },
+      "caption": { "displayName": "Caption", "purpose": "Definition labels, table headers and the card number, in sentence case." },
+      "card-title": { "displayName": "Card Title", "purpose": "Kanban and board card titles on cream stock, set at 84% width; three-line clamp, two when held." },
+      "card-meta": { "displayName": "Card Meta", "purpose": "The card's top line and one detail line, set at 84% width." },
+      "mono": { "displayName": "Mono", "purpose": "Code, commands and diffs only." }
+    },
+    "shadows": [
+      { "name": "card-edge", "value": "0 1px 0 rgb(0 0 0 / 0.25)", "purpose": "The paper edge under kanban cards and ask strips; not a lift." },
+      { "name": "lift", "value": "0 14px 30px -12px rgb(0 0 0 / 0.7), 0 4px 10px -4px rgb(0 0 0 / 0.5)", "purpose": "The red plate at rest and the floating jump-to-newest pill. Light theme: 0 14px 30px -14px rgb(31 31 36 / 0.28), 0 4px 10px -6px rgb(31 31 36 / 0.18)." },
+      { "name": "pop", "value": "0 24px 60px -18px rgb(0 0 0 / 0.75), 0 8px 18px -8px rgb(0 0 0 / 0.5)", "purpose": "Dialogs, drawers, the command palette, toasts and a dragged board card. Light theme: 0 24px 60px -20px rgb(31 31 36 / 0.32), 0 8px 18px -10px rgb(31 31 36 / 0.18)." },
+      { "name": "plate-focus", "value": "var(--shadow-pop), 0 0 0 2px color-mix(in srgb, var(--plate-text) 40%, transparent)", "purpose": "The plate while it holds focus; the rest of the cabinet dims instead of the plate glowing." },
+      { "name": "focus-ring", "value": "outline: 2px solid var(--focus); outline-offset: 2px", "purpose": "Every keyboard focus; inputs use offset 0 with the border cleared." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default curve for state transitions, overlays and the answer-focus dim." },
+      { "name": "dur-1", "value": "140ms", "purpose": "Hover and colour changes on controls." },
+      { "name": "dur-2", "value": "220ms", "purpose": "Overlays entering, the switch thumb, rows stepping back while the plate holds focus." },
+      { "name": "card-travel", "value": "spring(stiffness 420, damping 38, mass 0.9)", "purpose": "A card moving to the next station's pigeonhole as one shared layout, when the server says it moved." },
+      { "name": "plate-turn", "value": "rotateX(-70deg) to 0, spring(stiffness 300, damping 30)", "purpose": "The held card's ask turning over to its red reverse." },
+      { "name": "work-blink", "value": "opacity 1 to 0.25, 1.6s ease-in-out infinite", "purpose": "The running card's foot dot and the line page's current station mark." },
+      { "name": "shimmer", "value": "background-position sweep, 1.4s linear infinite", "purpose": "Loading skeletons; the only gradient in the system." },
+      { "name": "answer-focus", "value": "opacity 0.42, saturate(0.6) over dur-2", "purpose": "Every other cabinet row steps back while the plate holds focus." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "Card travel, plate turn, blink and shimmer stop; transitions collapse to 0.01ms." }
+    ],
+    "breakpoints": [
+      { "name": "stack", "value": "1180px" },
+      { "name": "topbar-icons", "value": "1100px" },
+      { "name": "cabinet-fold", "value": "900px" },
+      { "name": "single-column", "value": "760px" },
+      { "name": "compact", "value": "700px" },
+      { "name": "minimum", "value": "320px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Decides: the recommended answer, filled in the text colour.",
+      "html": "<button class='ds-btn-primary'>Merge</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 30px; padding: 0 11px; border-radius: var(--r-2, 5px); border: 1px solid var(--text, #faf9f6); background: var(--text, #faf9f6); color: var(--ground, #151518); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), border-color 140ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: color-mix(in srgb, var(--text, #faf9f6) 86%, var(--ground, #151518)); border-color: transparent; } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Plain Button",
+      "kind": "button",
+      "refersTo": "button-plain",
+      "description": "Redirects: an outlined alternative answer or a secondary action.",
+      "html": "<button class='ds-btn-plain'>Re-review</button>",
+      "css": ".ds-btn-plain { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 30px; padding: 0 11px; border-radius: var(--r-2, 5px); border: 1px solid var(--rule-strong, #4a4a53); background: transparent; color: var(--text, #faf9f6); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), border-color 140ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-plain:hover { background: color-mix(in srgb, var(--text, #faf9f6) 8%, transparent); border-color: var(--text-3, #8e8d95); } .ds-btn-plain:active { transform: translateY(1px); } .ds-btn-plain:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Ends or dismisses: bare text that brightens on hover.",
+      "html": "<button class='ds-btn-quiet'>Discard</button>",
+      "css": ".ds-btn-quiet { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 30px; padding: 0 11px; border-radius: var(--r-2, 5px); border: 1px solid transparent; background: transparent; color: var(--text-2, #b6b5af); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), color 140ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-quiet:hover { color: var(--text, #faf9f6); background: color-mix(in srgb, var(--text, #faf9f6) 8%, transparent); } .ds-btn-quiet:active { transform: translateY(1px); } .ds-btn-quiet:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Census Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "A count beside the floor sentence, led by its state dot; gold only because these cards are moving.",
+      "html": "<span class='ds-chip'><i class='ds-chip-dot'></i><b>2</b> working</span> <span class='ds-chip'><i class='ds-chip-dot' data-tone='alarm'></i><b>1</b> needs you</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 11px; border: 1px solid var(--rule, #2f2f37); border-radius: 999px; color: var(--text-2, #b6b5af); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; } .ds-chip b { color: var(--text, #faf9f6); font-weight: 600; } .ds-chip-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--run, #d4a24c); } .ds-chip-dot[data-tone='alarm'] { background: var(--alarm, #f0625a); }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A dialog field sitting back on the ground colour, label above.",
+      "html": "<label class='ds-field'><span class='ds-field-label'>What should change</span><input class='ds-input' placeholder='Say what to adjust' /></label>",
+      "css": ".ds-field { display: block; width: 320px; font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); } .ds-field-label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; color: var(--text-2, #b6b5af); } .ds-input { width: 100%; padding: 8px 10px; background: var(--ground, #151518); border: 1px solid var(--rule-strong, #4a4a53); border-radius: var(--r-2, 5px); color: var(--text, #faf9f6); font: inherit; font-size: 13px; } .ds-input::placeholder { color: var(--text-3, #8e8d95); } .ds-input:hover { border-color: var(--text-3, #8e8d95); } .ds-input:focus, .ds-input:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 0; border-color: transparent; }"
+    },
+    {
+      "name": "Top Bar Navigation",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Icon-and-word links in the top bar; the current page holds a faint wash.",
+      "html": "<nav class='ds-nav'><a class='ds-nav-item' href='#' aria-current='page'><svg width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='2' y='2.5' width='3.5' height='11' rx='1'/><rect x='6.25' y='2.5' width='3.5' height='7' rx='1'/><rect x='10.5' y='2.5' width='3.5' height='9' rx='1'/></svg>Board</a><a class='ds-nav-item' href='#'><svg width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M3 4h10'/><path d='M3 8h10'/><path d='M3 12h6'/></svg>Logs</a><a class='ds-nav-item' href='#'><svg width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M2.5 13.5h11'/><path d='M4 11V8'/><path d='M7 11V4.5'/><path d='M10 11V6.5'/><path d='M13 11V3'/></svg>Costs</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 2px; padding: 12px; background: var(--ground, #151518); border-bottom: 1px solid var(--rule, #2f2f37); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); } .ds-nav-item { display: flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: var(--r-3, 6px); color: var(--text-2, #b6b5af); font-size: 13px; font-weight: 500; text-decoration: none; transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), color 140ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-item:hover { color: var(--text, #faf9f6); background: color-mix(in srgb, var(--text, #faf9f6) 6%, transparent); } .ds-nav-item[aria-current='page'] { color: var(--text, #faf9f6); background: color-mix(in srgb, var(--text, #faf9f6) 9%, transparent); } .ds-nav-item:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Pickup Switch",
+      "kind": "custom",
+      "refersTo": "switch",
+      "description": "On is the text colour, never gold: gold is kept for a card that is moving.",
+      "html": "<label class='ds-pickup'><button class='ds-switch' role='switch' aria-checked='true' data-state='checked'><span class='ds-switch-thumb'></span></button><span>Pickup on</span></label> <label class='ds-pickup'><button class='ds-switch' role='switch' aria-checked='false' data-state='unchecked'><span class='ds-switch-thumb'></span></button><span>Pickup off</span></label>",
+      "css": ".ds-pickup { display: inline-flex; align-items: center; gap: 8px; margin-right: 16px; color: var(--text-3, #8e8d95); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-size: 11px; cursor: pointer; } .ds-switch { position: relative; width: 32px; height: 18px; padding: 0; border-radius: 999px; border: 1px solid var(--rule-strong, #4a4a53); background: var(--raised, #26262c); cursor: pointer; transition: background 140ms, border-color 140ms; } .ds-switch:hover { border-color: var(--text-3, #8e8d95); } .ds-switch[data-state='checked'] { background: var(--text, #faf9f6); border-color: var(--text, #faf9f6); } .ds-switch-thumb { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--text, #faf9f6); transform: translateX(2px); transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-switch[data-state='checked'] .ds-switch-thumb { transform: translateX(16px); background: var(--ground, #151518); } .ds-switch:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Kanban Card",
+      "kind": "card",
+      "refersTo": "kanban-card",
+      "description": "A live card in its station's pigeonhole: cream stock set narrow, 5px gold band, times right-aligned in the foot.",
+      "html": "<div class='ds-kc-cell'><article class='ds-kc' aria-label='#2 Flag duplicate supplier invoices, at Code'><div class='ds-kc-top'><a class='ds-kc-no' href='#'>#2</a><span>$0.84</span></div><p class='ds-kc-title'>Flag duplicate supplier invoices</p><div class='ds-kc-detail'>wrote the matcher and its tests</div><div class='ds-kc-foot'><i class='ds-kc-band' aria-hidden='true'></i>12m <span>/ 40m</span></div></article></div>",
+      "css": ".ds-kc-cell { display: flex; width: 150px; height: 150px; padding: 6px; background: var(--cabinet, #1f1f24); border: 1px solid var(--rule, #2f2f37); } .ds-kc { flex: 1; display: flex; flex-direction: column; gap: 5px; padding: 7px 8px 8px; background: var(--card, #faf9f6); color: var(--card-ink, #1f1f24); border-top: 5px solid var(--run, #d4a24c); border-radius: 0 0 var(--r-1, 3px) var(--r-1, 3px); box-shadow: 0 1px 0 rgb(0 0 0 / 0.25); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-stretch: 84%; font-variant-numeric: tabular-nums; } .ds-kc-top { display: flex; justify-content: space-between; font-size: 11px; color: var(--card-3, #68665e); } .ds-kc-no { color: var(--card-2, #4b4942); font-weight: 700; text-decoration: none; } .ds-kc-no:hover { color: var(--card-ink, #1f1f24); text-decoration: underline; } .ds-kc-no:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; border-radius: 3px; } .ds-kc-title { margin: 0; font-size: 13px; font-weight: 600; line-height: 1.18; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } .ds-kc-detail { font-size: 11px; line-height: 1.3; color: var(--card-2, #4b4942); } .ds-kc-foot { display: flex; align-items: baseline; justify-content: flex-end; gap: 3px; margin-top: auto; font-size: 12px; font-weight: 600; white-space: nowrap; } .ds-kc-foot span { font-weight: 400; color: var(--card-3, #68665e); } .ds-kc-band { margin-right: auto; align-self: center; width: 6px; height: 6px; border-radius: 50%; background: var(--run, #d4a24c); animation: ds-kc-work 1.6s ease-in-out infinite; } @keyframes ds-kc-work { 50% { opacity: 0.25; } } @media (prefers-reduced-motion: reduce) { .ds-kc-band { animation: none; } }"
+    },
+    {
+      "name": "Red Reversed Plate",
+      "kind": "custom",
+      "refersTo": "plate",
+      "description": "The one red plate on screen, for the oldest ask: opens beneath the stations, notch pointing at the held card, answers on it.",
+      "html": "<div class='ds-plate-wrap'><article class='ds-plate'><div class='ds-plate-top'><span><b>Decision</b> · #1 Offline map tiles for the north reef trail</span><span class='ds-plate-when'>held at Code · waiting 18m</span></div><p class='ds-plate-q'>How long should the downloaded data stay on the visitor’s phone?</p><div class='ds-plate-acts'><button class='ds-plate-btn ds-plate-btn-primary'>A · Cache on the device for 7 days</button><button class='ds-plate-btn'>B · Current visit only</button><button class='ds-plate-btn ds-plate-btn-quiet'>Skip</button></div></article></div>",
+      "css": ".ds-plate-wrap { padding: 14px 6px 10px; background: var(--cabinet, #1f1f24); max-width: 720px; } .ds-plate { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 10px 14px 12px; background: var(--plate, #c2372d); color: var(--plate-text, #faf9f6); border-radius: var(--r-1, 3px); box-shadow: var(--shadow-lift, 0 14px 30px -12px rgb(0 0 0 / 0.7), 0 4px 10px -4px rgb(0 0 0 / 0.5)); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-variant-numeric: tabular-nums; } .ds-plate::before { content: ''; position: absolute; top: -7px; left: 40%; width: 14px; height: 8px; background: var(--plate, #c2372d); clip-path: polygon(50% 0, 100% 100%, 0 100%); } .ds-plate:focus-within { box-shadow: var(--shadow-pop, 0 24px 60px -18px rgb(0 0 0 / 0.75), 0 8px 18px -8px rgb(0 0 0 / 0.5)), 0 0 0 2px color-mix(in srgb, var(--plate-text, #faf9f6) 40%, transparent); } .ds-plate-top { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; font-weight: 500; } .ds-plate-top b { font-weight: 700; } .ds-plate-when { flex: none; color: var(--plate-2, #fdeeeb); } .ds-plate-q { margin: 0; max-width: 62ch; font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; } .ds-plate-acts { display: flex; flex-wrap: wrap; gap: 6px; } .ds-plate-btn { height: 26px; padding: 0 9px; border-radius: var(--r-2, 5px); border: 1px solid color-mix(in srgb, var(--plate-text, #faf9f6) 70%, transparent); background: transparent; color: var(--plate-text, #faf9f6); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), border-color 140ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-plate-btn:hover { background: color-mix(in srgb, var(--plate-text, #faf9f6) 14%, transparent); border-color: var(--plate-text, #faf9f6); } .ds-plate-btn-primary, .ds-plate-btn-primary:hover { background: var(--plate-text, #faf9f6); border-color: var(--plate-text, #faf9f6); color: var(--plate, #c2372d); } .ds-plate-btn-quiet { border-color: transparent; text-decoration: underline; text-underline-offset: 3px; } .ds-plate-btn:active { transform: translateY(1px); } .ds-plate-btn:focus-visible { outline: 2px solid var(--plate-text, #faf9f6); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ask Strip",
+      "kind": "custom",
+      "refersTo": "ask-strip",
+      "description": "Every ask that is not the oldest: one line on cream stock with a 3px red band and the same notch.",
+      "html": "<div class='ds-strip-wrap'><article class='ds-strip'><p class='ds-strip-text'><b>Pull request</b>The pull request waits for your review.</p><span class='ds-strip-when'>waiting 10s</span><div class='ds-strip-acts'><button class='ds-strip-btn ds-strip-btn-primary'>Merge</button><button class='ds-strip-btn'>Re-review</button><button class='ds-strip-btn ds-strip-btn-quiet'>Discard</button></div></article></div>",
+      "css": ".ds-strip-wrap { padding: 16px 6px 10px; background: var(--cabinet, #1f1f24); max-width: 760px; } .ds-strip { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 5px 8px 5px 12px; background: var(--card, #faf9f6); color: var(--card-ink, #1f1f24); border-top: 3px solid var(--plate, #c2372d); border-radius: 0 0 var(--r-1, 3px) var(--r-1, 3px); box-shadow: 0 1px 0 rgb(0 0 0 / 0.25); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-stretch: 84%; font-variant-numeric: tabular-nums; } .ds-strip::before { content: ''; position: absolute; top: -11px; left: 70%; width: 14px; height: 8px; background: var(--plate, #c2372d); clip-path: polygon(50% 0, 100% 100%, 0 100%); } .ds-strip-text { flex: 1; min-width: 0; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 600; } .ds-strip-text b { margin-right: 8px; color: var(--plate, #c2372d); font-weight: 700; } .ds-strip-when { flex: none; font-size: 12px; color: var(--card-3, #68665e); } .ds-strip-acts { display: flex; flex: none; gap: 6px; } .ds-strip-btn { height: 26px; padding: 0 9px; border-radius: var(--r-2, 5px); border: 1px solid color-mix(in srgb, var(--card-ink, #1f1f24) 35%, transparent); background: transparent; color: var(--card-ink, #1f1f24); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-strip-btn:hover { background: color-mix(in srgb, var(--card-ink, #1f1f24) 8%, transparent); } .ds-strip-btn-primary, .ds-strip-btn-primary:hover { background: var(--card-ink, #1f1f24); border-color: var(--card-ink, #1f1f24); color: var(--card, #faf9f6); } .ds-strip-btn-quiet { border-color: transparent; color: var(--card-2, #4b4942); } .ds-strip-btn:active { transform: translateY(1px); } .ds-strip-btn:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Board Card",
+      "kind": "card",
+      "refersTo": "board-card",
+      "description": "A ticket on the board: cream stock with a 3px band in its column's state colour, on an ink column that carries no band.",
+      "html": "<div class='ds-bc-col'><button class='ds-bc' data-tone='done'><span class='ds-bc-top'><b>#7</b><span>3 hours ago</span></span><span class='ds-bc-title'>Add VAT number validation for EU customers</span></button><button class='ds-bc'><span class='ds-bc-top'><b>#4</b><span>3 hours ago</span></span><span class='ds-bc-title'>Show the posting period on every journal entry</span></button></div>",
+      "css": ".ds-bc-col { display: flex; flex-direction: column; gap: 6px; width: 190px; padding: 10px; background: var(--cabinet, #1f1f24); border: 1px solid var(--rule, #2f2f37); border-radius: var(--r-3, 6px); } .ds-bc { --tone: var(--slot, #3d3d46); display: flex; flex-direction: column; gap: 4px; width: 100%; padding: 8px 10px 9px; border: 0; border-top: 3px solid var(--tone); border-radius: 0 0 var(--r-1, 3px) var(--r-1, 3px); background: var(--card, #faf9f6); color: var(--card-ink, #1f1f24); font-family: var(--font, 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif); font-stretch: 84%; font-variant-numeric: tabular-nums; text-align: left; cursor: grab; } .ds-bc[data-tone='progress'] { --tone: var(--run, #d4a24c); } .ds-bc[data-tone='needs'] { --tone: var(--alarm, #f0625a); } .ds-bc[data-tone='done'] { --tone: var(--ok, #3ddc84); } .ds-bc:hover { box-shadow: 0 0 0 1px var(--rule-strong, #4a4a53); } .ds-bc:focus-visible { outline: 2px solid var(--focus, #72b6ff); outline-offset: 2px; } .ds-bc-top { display: flex; justify-content: space-between; font-size: 11px; color: var(--card-3, #68665e); } .ds-bc-top b { font-weight: 700; color: var(--card-2, #4b4942); } .ds-bc-title { font-size: 13px; font-weight: 600; line-height: 1.25; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Kanban Post",
+    "overview": "The floor is a kanban post: one ink cabinet ruled into pigeonholes, one row per production line, one slot per station, and every live card sitting as a sleeved kanban in the slot where it is. Cards are cream card stock with black print, set narrow like a printed withdrawal kanban, and each carries a printed top band that says what it is doing. A card that is moving wears a gold band. When a card needs a person it stays in its slot and its ask opens beneath the stations: the oldest ask turns over to the one red reversed plate on screen, with the answer buttons on it, and every other ask is a single strip on the card's own stock.\n\nThe room is a dense, quiet control room kept open all day on a second screen. The interface says nothing while the factory moves and is unmistakable when it asks. Fields are flat and committed: ink on a darker ground, hairline rules for structure, cream only where there is a card, colour only where it carries a state. The world is dark by default with a light twin that keeps every rule. The chosen form is the Toyota withdrawal kanban and the heijunka levelling box; the refused category default is the status table with pills plus a separate inbox that sends the operator elsewhere to answer.\n\nConfirmed rejections: gradients, glows and grain; a second reversed plate; decorative colour; type or icons loaded from another host.",
+    "keyCharacteristics": [
+      "One ink cabinet field ruled by hairlines into station pigeonholes; passed stations show a green tick and their time, empty slots are faint outlines, an idle line is one dashed slot across.",
+      "Cream card stock with black print, set at 84% width, with a printed top band and square top corners.",
+      "Gold only for a card that is moving; one red reversed plate per screen, for the oldest ask.",
+      "Flat committed fields; shadows only for what has left the field.",
+      "Archivo Variable throughout, bundled, with tabular numerals and times right-aligned against the slot edge."
+    ],
+    "rules": [
+      { "name": "The Gold Means Moving Rule", "body": "Gold marks a card that is moving and nothing else. State words for other states, switches, selected segments, armed confirmations, warnings, highlights and charts are never gold; the checked switch is the text colour (cream on dark, ink on light).", "section": "colors" },
+      { "name": "The One Reversed Plate Rule", "body": "Exactly one red reversed plate is on screen: the oldest ask. Every other ask is a single strip on cream stock with a 3px red band. Ink containers are never reversed.", "section": "colors" },
+      { "name": "The Plate Red On Stock Rule", "body": "Red text or marks on cream stock use Reversed-Plate Red; Signal Coral is for ink only, because it fails contrast on cream.", "section": "colors" },
+      { "name": "The Narrow Stock Rule", "body": "Card stock (the kanban card, the ask strip, the board card) is set at 84% width; everything printed on ink stays at normal width. Width is the only difference; never add a second family.", "section": "typography" },
+      { "name": "The Tabular Clock Rule", "body": "Tabular numerals everywhere. A card's time at this station and its run time sit right-aligned in the card's foot, against the slot edge; a slot too narrow for both keeps the station's time.", "section": "typography" },
+      { "name": "The Flat Field Rule", "body": "No gradients except the loading shimmer, no glows, no grain, no texture. Fields are single committed colours.", "section": "elevation" },
+      { "name": "The Lifted Only Rule", "body": "A shadow means something has left the field: the plate, an overlay, a dragged card. Resting containers and resting cards never cast one.", "section": "elevation" },
+      { "name": "The Printed Band Rule", "body": "A printed top band belongs to cream card stock only: the kanban card 5px, the line page's current station 4px, the board card and the ask strip 3px. Its top corners are square (radius 0 0 r r). Ink containers (board columns, panels, Needs you items, requirement cards) carry no band.", "section": "shapes" },
+      { "name": "The Dashed Means Empty Rule", "body": "A dashed edge marks an empty slot: an idle line, an empty board column, an honest empty note. Anything real, including an unread error, gets a solid edge.", "section": "shapes" },
+      { "name": "The Three Tiers Rule", "body": "Primary decides, plain redirects, quiet ends or dismisses. No fourth tier and no coloured buttons; an ask's answers keep these tiers on ink, on the plate and on stock.", "section": "components" },
+      { "name": "The Answer In Place Rule", "body": "Answers are drawn on the ask itself (the plate, the strip, the Needs you item, the line page) with the same buttons in the same order; answering never opens another page.", "section": "components" }
+    ],
+    "dos": [
+      "Do put each live card in the slot of the station it is at, as cream stock with a 5px gold band, number and cost on top, title, one detail line, and the station time and run time right-aligned in the foot.",
+      "Do give the oldest ask the red plate and every other ask a strip; keep the held card in its own slot and open the ask beneath the stations with the notch pointing at it.",
+      "Do use Reversed-Plate Red for red on cream and Signal Coral for red on ink.",
+      "Do fill the checked switch, the selected tab and the primary button with the text colour (cream on dark, ink on light).",
+      "Do draw unread as a sentence in a solid coral note and empty as a dashed slot with a sentence; never let one look like the other.",
+      "Do keep tabular numerals and right-aligned times, and use the one 16px, 1.5px-stroke icon set inline.",
+      "Do stop card travel, the plate's turn, the blinking dot and the shimmer under reduced motion."
+    ],
+    "donts": [
+      "Don't use gold for anything but a moving card: not for warnings, selections, highlights, findings, chart strokes, chat tints or switch states.",
+      "Don't put a second reversed plate on screen or reverse an ink container.",
+      "Don't put a printed band on an ink container (board columns, panels, Needs you items, requirement cards), and don't round a band's top corners.",
+      "Don't use gradients (the loading shimmer excepted), glows, grain or texture.",
+      "Don't set uppercase letter-spaced eyebrows or kickers above headings; the cabinet's station header row is the one uppercase line and it stays in the cabinet.",
+      "Don't fall back to a status table with pills and a separate inbox that sends the operator elsewhere to answer.",
+      "Don't load fonts or icons from another host; Archivo Variable and the icon set are bundled."
+    ]
+  }
+}
