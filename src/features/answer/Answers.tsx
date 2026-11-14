@@ -236,7 +236,7 @@ function AdjustDialog({ project, issue, left, onClose }: { project: string; issu
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="The empty week should still download a file with the header row."
-          autoFocus
+         
         />
         <div className={s.count}>{text.length} / 2000</div>
         <DialogActions>
@@ -272,7 +272,7 @@ function StopDialog({ project, issue, onClose }: { project: string; issue: strin
         <label className={s.label} htmlFor="stop-why">
           Why (written on the card, optional)
         </label>
-        <input id="stop-why" className={s.input} value={why} onChange={(e) => setWhy(e.target.value)} autoFocus />
+        <input id="stop-why" className={s.input} value={why} onChange={(e) => setWhy(e.target.value)} />
         <DialogActions>
           <Button tier="quiet" onClick={onClose}>
             Keep it running
@@ -291,12 +291,11 @@ function ApproveDialog({ project, issue, title, onClose }: { project: string; is
   const info = useQuery(q.promote(project, issue));
   const [approver, setApprover] = useState("");
   const [password, setPassword] = useState("");
-  const [version, setVersion] = useState("");
+  const [picked, setVersion] = useState<string | null>(null);
   const [comment, setComment] = useState("");
   const bumps = info.data?.suggestions ?? {};
-  useEffect(() => {
-    if (!version && bumps.patch) setVersion(bumps.patch);
-  }, [bumps.patch, version]);
+  // The patch bump is the suggestion until the person picks or types another.
+  const version = picked ?? bumps.patch ?? "";
   return (
     <Dialog open onOpenChange={(o) => !o && onClose()} title={`Release #${issue} to production`} description={title} width={480}>
       <form

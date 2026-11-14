@@ -134,7 +134,7 @@ export function CardDrawer({ project, cardRef, preview, onClose }: { project: st
             <label className={f.label} htmlFor="reason">
               {words.reason ?? "Why? (one line)"}
             </label>
-            <input id="reason" className={f.input} value={reason} onChange={(e) => setReason(e.target.value)} autoFocus />
+            <input id="reason" className={f.input} value={reason} onChange={(e) => setReason(e.target.value)} />
             <DialogActions>
               <Button tier="quiet" onClick={() => setReasonFor(null)}>
                 {words.cancel ?? "Cancel"}

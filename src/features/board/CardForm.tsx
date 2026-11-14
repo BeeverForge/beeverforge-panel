@@ -56,23 +56,23 @@ export function CardForm({ project, editing, onClose }: { project: string; editi
   const [draft, setDraft] = useState<Draft>(parsed ?? EMPTY);
   const [text, setText] = useState(editing?.body ?? "");
   const [column, setColumn] = useState<"Backlog" | "TO-DO">("Backlog");
-  const [gate, setGate] = useState<{ state: "idle" | "checking" | "ok" | "refused" | "unread"; said: string }>({ state: "idle", said: "" });
+  const [verdict, setVerdict] = useState<{ for: string; state: "ok" | "refused" | "unread"; said: string } | null>(null);
 
   const body = raw ? text : compose(draft);
+  const draftKey = `${title}\u0000${body}`;
+  const empty = !title.trim() && !body.trim();
+  // The verdict shown is the one for the draft on screen; anything older is still being asked.
+  const gate = empty ? { state: "idle" as const, said: "" } : verdict?.for === draftKey ? verdict : { state: "checking" as const, said: "" };
 
   useEffect(() => {
-    if (!title.trim() && !body.trim()) {
-      setGate({ state: "idle", said: "" });
-      return;
-    }
-    setGate((g) => ({ ...g, state: "checking" }));
+    if (empty) return;
     const id = window.setTimeout(() => {
       checkCard(project, title, body)
-        .then((said) => setGate({ state: said ? "refused" : "ok", said }))
-        .catch((e: Error) => setGate({ state: "unread", said: e.message }));
+        .then((said) => setVerdict({ for: draftKey, state: said ? "refused" : "ok", said }))
+        .catch((e: Error) => setVerdict({ for: draftKey, state: "unread", said: e.message }));
     }, 350);
     return () => window.clearTimeout(id);
-  }, [project, title, body]);
+  }, [project, title, body, draftKey, empty]);
 
   const save = (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +88,7 @@ export function CardForm({ project, editing, onClose }: { project: string; editi
       <form className={s.form} onSubmit={save}>
         <label className={f.field}>
           <span className={f.label}>Title</span>
-          <input className={f.input} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Export the week's reconciled lines" autoFocus required />
+          <input className={f.input} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Export the week's reconciled lines" required />
         </label>
 
         <div className={s.modeRow}>

@@ -12,7 +12,10 @@ import { nowOf, positionFromLog, stationsFor } from "../../live/pipeline";
 import { ago, duration, money, useNow } from "../../live/clock";
 import { Button, Dot, Note, Skeleton, uiStyles } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
+import { capitalise, Said } from "../../ui/text";
 import { Answers, KICKER, kindOf, questionOf } from "../answer/Answers";
+import { WaitedFor } from "../answer/WaitedFor";
+import { waitedFrom } from "../answer/waiting";
 import { usePickup, useScan } from "../answer/useAnswer";
 import { placeOf, stationTimes } from "../floor/model";
 import { LogFeed } from "../logs/LogFeed";
@@ -40,7 +43,7 @@ export function LinePage() {
   const job = jobs.find((j) => j.status === "running");
   const log = useJobLog(project, job?.issue ?? "", Boolean(job?.issue));
   const position = placeOf(job, stations, log.events);
-  const times = stationTimes(log.events, stations);
+  const times = stationTimes(log.events, stations, position?.at);
   const fromLog = positionFromLog(log.events, stations);
   const need = inbox.data?.find((it) => it.project === project && it.issue === job?.issue);
   const kind = kindOf(need, job);
@@ -97,7 +100,7 @@ export function LinePage() {
 
       <div className={s.grid}>
         <div className={s.main}>
-          <section className={s.live} aria-labelledby="live-title" data-held={kind && kind !== "rate_limit" ? true : undefined}>
+          <section className={s.live} aria-labelledby="live-title">
             {engine.isPending ? (
               <div className={s.liveHead}>
                 <Skeleton w="45%" h={20} />
@@ -118,6 +121,7 @@ export function LinePage() {
                   {kind && kind !== "rate_limit" ? (
                     <>
                       <Dot tone="alarm" /> {KICKER[kind]}: {questionOf(kind, need, job)}
+                      <WaitedFor waited={waitedFrom(need?.parked_at ?? job.action?.parked_at, log.events)} now={now} className={s.waited} />
                     </>
                   ) : (
                     <>
@@ -146,9 +150,9 @@ export function LinePage() {
                 </dl>
                 {kind && (
                   <div className={s.ask}>
-                    {kind === "merge" && need?.review?.word && (
+                    {kind === "merge" && need?.review?.word && need.review.clause && (
                       <p className={s.reviewLine} data-level={need.review.level}>
-                        Review {need.review.word.toLowerCase()} — {need.review.clause}
+                        {capitalise(need.review.clause)}
                       </p>
                     )}
                     {kind === "merge" && job.action?.pr_url && (
@@ -173,7 +177,11 @@ export function LinePage() {
                   {f?.word ?? "…"}
                 </p>
                 <p>{f?.clause}</p>
-                {f?.detail && <p className={s.sub}>{f.detail}</p>}
+                {f?.detail && (
+                  <p className={s.sub}>
+                    <Said text={f.detail} />
+                  </p>
+                )}
                 {f?.cmd && <code className={s.cmd}>{f.cmd}</code>}
               </div>
             )}
@@ -296,7 +304,9 @@ function Cockpit({ project }: { project: string }) {
           ) : d.engine_ui_hint ? (
             <div>
               <dt>Engine</dt>
-              <dd className={s.sub}>{d.engine_ui_hint}</dd>
+              <dd className={s.sub}>
+                <Said text={d.engine_ui_hint} />
+              </dd>
             </div>
           ) : null}
         </dl>

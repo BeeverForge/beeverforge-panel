@@ -1,16 +1,21 @@
 // The frame every page shares: the brand, whether this page is live, where to go, and — on the
 // floor's pages — the factory's one-sentence verdict, said by the server and never computed here.
-import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { Link, Navigate, Outlet, useRouterState } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { q } from "../api/queries";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { useLive, STALE_AFTER_MS } from "../live/status";
 import { useEngine, useFloor } from "../live/useLiveQueries";
 import { ago, useNow } from "../live/clock";
 import { Chip, Dot, Skeleton } from "../ui/Button";
 import { Icon, Mark } from "../ui/Icon";
+import { Said } from "../ui/text";
 import { Toaster } from "../ui/toast";
 import { usePickup } from "../features/answer/useAnswer";
-import { CommandPalette } from "./CommandPalette";
+// Loaded the first time somebody opens it: most visits never do.
+const CommandPalette = lazy(() => import("./CommandPalette").then((m) => ({ default: m.CommandPalette })));
 import type { FloorRead } from "../api/types";
+import { Narration } from "./Narration";
 import s from "./shell.module.css";
 
 const BRAND = import.meta.env.VITE_BRAND || "BeeverForge";
@@ -56,9 +61,15 @@ function NavLink({ to, icon, children }: { to: string; icon: Parameters<typeof I
 export function Shell() {
   const [theme, toggleTheme] = useTheme();
   const [palette, setPalette] = useState(false);
+  const [paletteUsed, setPaletteUsed] = useState(false);
+  if (palette && !paletteUsed) setPaletteUsed(true);
   const path = useRouterState({ select: (st) => st.location.pathname });
+  const me = useQuery(q.whoami());
+  const scopes = me.data?.scopes as string[] | null | undefined;
+  // A credential for the product area alone has no floor to show: its page is the product room.
+  const productOnly = Array.isArray(scopes) && scopes.includes("product") && !scopes.includes("floor");
   // The line page states its own line's verdict in its header; the bar is the whole floor's.
-  const onFloor = path === "/";
+  const onFloor = path === "/" && !productOnly;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -97,21 +108,32 @@ export function Shell() {
             Product
           </NavLink>
         </nav>
+        {me.data?.logout && (
+          <a className={s.nav} href={me.data.logout as string} title={`Signed in as ${me.data.display ?? me.data.id}`}>
+            <Icon name="user" size={15} />
+            <span>Sign out</span>
+          </a>
+        )}
         <button type="button" className={s.iconBtn} onClick={toggleTheme} aria-label={theme === "light" ? "Switch to the dark theme" : "Switch to the light theme"} title="Theme">
           <Icon name="theme" size={15} />
         </button>
-        <button type="button" className={s.search} onClick={() => setPalette(true)} aria-label="Find a card, a project or an action">
+        <button type="button" className={s.search} onClick={() => setPalette(true)}>
           <Icon name="search" size={14} />
-          <span>Find a card or project</span>
+          <span className={s.searchText}>Find a card or project</span>
           <kbd>{navigator.platform.includes("Mac") ? "⌘K" : "Ctrl K"}</kbd>
         </button>
       </header>
       {onFloor && <FloorBar project="" />}
       <BuildSplit />
       <main id="main" className={s.main}>
-        <Outlet />
+        {productOnly && !path.startsWith("/product") ? <Navigate to="/product" replace /> : <Outlet />}
       </main>
-      <CommandPalette open={palette} onOpenChange={setPalette} />
+      {paletteUsed && (
+        <Suspense fallback={null}>
+          <CommandPalette open={palette} onOpenChange={setPalette} />
+        </Suspense>
+      )}
+      <Narration />
       <Toaster />
     </div>
   );
@@ -158,7 +180,11 @@ function FloorBar({ project }: { project: string }) {
             <span className={s.word}>{f.word}</span> — {f.clause}
           </h1>
         )}
-        {f?.detail && <p className={s.detail}>{f.detail}</p>}
+        {f?.detail && (
+          <p className={s.detail}>
+            <Said text={f.detail} />
+          </p>
+        )}
       </div>
       {census && !project && (
         <div className={s.chips}>

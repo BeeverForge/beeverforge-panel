@@ -2,9 +2,12 @@
 // the red plates carry; here they are in one column so nothing that needs you is off screen.
 import { Link } from "@tanstack/react-router";
 import type { EngineJob, InboxItem } from "../../api/types";
-import { duration, useNow } from "../../live/clock";
+import { useNow } from "../../live/clock";
 import { Dot, Note, Skeleton } from "../../ui/Button";
+import { capitalise } from "../../ui/text";
 import { Answers, KICKER, kindOf, questionOf, type NeedKind } from "../answer/Answers";
+import { WaitedFor } from "../answer/WaitedFor";
+import { useWaited } from "../answer/waiting";
 import s from "./needs.module.css";
 
 export function NeedsYou({ items, jobs, error, loading }: { items: InboxItem[] | undefined; jobs: EngineJob[]; error: unknown; loading: boolean }) {
@@ -44,7 +47,7 @@ export function NeedsYou({ items, jobs, error, loading }: { items: InboxItem[] |
 function Item({ it, job }: { it: InboxItem; job?: EngineJob }) {
   const now = useNow();
   const kind = (kindOf(it, job) ?? "impediment") as NeedKind;
-  const parked = typeof it.parked_at === "string" ? it.parked_at : undefined;
+  const waited = useWaited(it.project ?? "", it.issue ?? "", it.parked_at);
   return (
     <li className={s.item}>
       <div className={s.top}>
@@ -53,13 +56,13 @@ function Item({ it, job }: { it: InboxItem; job?: EngineJob }) {
           {it.project} #{it.issue}
         </Link>
         <span className={s.kind}>{KICKER[kind]}</span>
-        {parked && <span className={s.when}>{duration(now - new Date(parked).getTime())}</span>}
+        <WaitedFor waited={waited} now={now} className={s.when} />
       </div>
       {it.title && <p className={s.cardTitle}>{it.title}</p>}
       <p className={s.q}>{questionOf(kind, it, job)}</p>
-      {it.review?.word && (
+      {it.review?.word && it.review.clause && (
         <p className={s.meta} data-level={it.review.level}>
-          Review {it.review.word.toLowerCase()} — {it.review.clause}
+          {capitalise(it.review.clause)}
         </p>
       )}
       {it.accepted?.said && <p className={s.meta}>{it.accepted.said}</p>}

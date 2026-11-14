@@ -22,7 +22,7 @@
     --text: #faf9f6;
     --text-2: #b6b5af;
     --text-3: #8e8d95;
-    --text-4: #6a6970;
+    --text-4: #84838b;
 
     /* card stock */
     --card: #faf9f6;
@@ -41,7 +41,7 @@
     --alarm-wash: rgb(240 98 90 / 0.12);
     --plate: #c2372d;
     --plate-text: #faf9f6;
-    --plate-2: #f6d9d5;
+    --plate-2: #fdeeeb;
     --clock: #8fb4e8;
     --link: #72b6ff;
     --idle: #6b6a72;
@@ -98,7 +98,7 @@
     --text: #1f1f24;
     --text-2: #45444b;
     --text-3: #64636b;
-    --text-4: #8a8990;
+    --text-4: #6c6b72;
 
     --card: #ffffff;
     --card-ink: #1f1f24;

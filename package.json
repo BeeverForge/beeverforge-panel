@@ -21,6 +21,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "eslint .",
+    "lint:sh": "shellcheck -s bash scripts/rig.bash",
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test"

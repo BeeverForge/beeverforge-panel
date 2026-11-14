@@ -293,6 +293,16 @@ on("POST", "/api/act/{name}", async (req, res, m) => {
       return ok(res, "asked — the tech-lead answers in this project's chat", { project });
     }
     if (name.startsWith("product_") && product.handles(name)) return ok(res, ...(await product.act(name, params)));
+    if (name === "product_board") {
+      // The role reads the rig's board; the columns a job sets are the simulator's, as on the board.
+      const up = await fetch(new URL(`/api/act/${name}`, BACKEND), { method: "POST", headers: { "content-type": "application/json" }, body: raw.toString("utf8") });
+      const out = (await up.json().catch(() => null)) as { data?: { cards?: { ref: string; column: string; started?: boolean }[] } } | null;
+      for (const c of out?.data?.cards ?? []) {
+        const held = factory.columnOf(project, c.ref);
+        if (held) Object.assign(c, { column: held, started: true });
+      }
+      return send(res, up.status, out);
+    }
     if (name === "card_move") {
       const held = factory.columnOf(project, issue);
       if (held) {

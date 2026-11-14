@@ -179,9 +179,10 @@
     flex: none;
     transition: background var(--dur-1), border-color var(--dur-1);
   }
+  /* On is the text colour, never gold: gold is kept for a card that is moving. */
   .switch[data-state="checked"] {
-    background: var(--run);
-    border-color: var(--run);
+    background: var(--text);
+    border-color: var(--text);
   }
   .thumb {
     display: block;
@@ -194,6 +195,6 @@
   }
   .switch[data-state="checked"] .thumb {
     transform: translateX(16px);
-    background: var(--brand-ink);
+    background: var(--ground);
   }
 }

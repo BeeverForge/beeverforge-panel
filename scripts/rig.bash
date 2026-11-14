@@ -5,12 +5,12 @@
 # be picked up by a real agent or spend a harness token. The factory simulator (../sim) plays the
 # engine's part instead.
 #
-#   rig.sh install   make the venv and install this checkout into it (once)
-#   rig.sh serve     serve the API in the foreground on $PANEL_NEXT_RIG_PORT (8788)
-#   rig.sh repos     make the dummy git repositories and print the directory they are in
-#   rig.sh requirements   commit sim/requirements/<project>/ into each product's context repository
-#   rig.sh stop      stop the API the rig serves
-#   rig.sh reset     stop it and delete everything the rig wrote
+#   rig.bash install   make the venv and install this checkout into it (once)
+#   rig.bash serve     serve the API in the foreground on $PANEL_NEXT_RIG_PORT (8788)
+#   rig.bash repos     make the dummy git repositories and print the directory they are in
+#   rig.bash requirements   commit sim/requirements/<project>/ into each product's context repository
+#   rig.bash stop      stop the API the rig serves
+#   rig.bash reset     stop it and delete everything the rig wrote
 set -euo pipefail
 
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
@@ -106,7 +106,7 @@ case ${1:-serve} in
     rm -rf "$rig"
     ;;
   *)
-    printf 'usage: rig.sh install|serve|repos|requirements|stop|reset\n' >&2
+    printf 'usage: rig.bash install|serve|repos|requirements|stop|reset\n' >&2
     exit 2
     ;;
 esac

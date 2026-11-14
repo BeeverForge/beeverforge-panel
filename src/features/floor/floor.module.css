@@ -44,6 +44,12 @@
   .row[data-idle] {
     min-height: 64px;
   }
+  .row[data-held] {
+    grid-template-rows: minmax(140px, auto) auto;
+  }
+  .row[data-held] > .label {
+    grid-row: span 2;
+  }
   /* Answering focuses: the line being answered stays, the rest of the cabinet steps back. */
   .cabinet:has(.plate:focus-within) .row:not(:has(.plate:focus-within)) {
     opacity: 0.42;
@@ -75,7 +81,8 @@
     font-weight: 600;
     color: var(--text-2);
   }
-  .word[data-level="ok"] {
+  /* Gold means a card is moving, nothing else: an armed line reads in plain text. */
+  .word[data-running] {
     color: var(--run);
   }
   .word[data-level="warn"] {
@@ -100,6 +107,29 @@
     font-size: var(--t-11);
     color: var(--text-3);
     cursor: pointer;
+  }
+  /* The stations in small: the same marks as the slots, shown where the slots are folded away. */
+  .pips {
+    display: none;
+    gap: 3px;
+  }
+  .pips li {
+    width: 16px;
+    height: 6px;
+    border-radius: 2px;
+    border: 1px solid var(--slot);
+  }
+  .pips li[data-state="passed"] {
+    background: var(--ok);
+    border-color: var(--ok);
+  }
+  .pips li[data-state="here"] {
+    background: var(--run);
+    border-color: var(--run);
+  }
+  .pips li[data-state="held"] {
+    background: var(--plate);
+    border-color: var(--plate);
   }
 
   .cell {
@@ -168,12 +198,20 @@
     background: var(--card);
     color: var(--card-ink);
     border-top: 5px solid var(--run);
-    border-radius: var(--r-1);
+    border-radius: 0 0 var(--r-1) var(--r-1);
     font-stretch: var(--stock);
     box-shadow: 0 1px 0 rgb(0 0 0 / 0.25);
+    container-type: inline-size;
   }
   .card[data-paused] {
     border-top-color: var(--clock);
+  }
+  .card[data-held] {
+    border-top-color: var(--plate);
+  }
+  .heldLine {
+    color: var(--plate);
+    font-weight: 600;
   }
   .cardTop {
     display: flex;
@@ -211,6 +249,11 @@
     flex-wrap: wrap;
     gap: 2px 7px;
   }
+  .gates > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
   .gates [data-passed="true"] {
     color: var(--card-ok);
   }
@@ -227,7 +270,6 @@
     display: flex;
     align-items: baseline;
     justify-content: flex-end;
-    flex-wrap: wrap;
     gap: 3px;
     white-space: nowrap;
     margin-top: auto;
@@ -237,6 +279,12 @@
   .cardTotal {
     font-weight: 400;
     color: var(--card-3);
+  }
+  /* A slot too narrow for both times keeps the one for this station; the run's is in the title. */
+  @container (max-width: 96px) {
+    .cardTotal {
+      display: none;
+    }
   }
   .band {
     margin-right: auto;
@@ -251,6 +299,10 @@
     background: var(--clock);
     animation: none;
   }
+  .card[data-held] .band {
+    background: var(--plate);
+    animation: none;
+  }
   @keyframes work {
     50% {
       opacity: 0.25;
@@ -258,7 +310,15 @@
   }
 
   /* ── the red reversed plate: the one thing on screen that needs you ───────────────────── */
+  /* It opens under the station cells, so every passed tick and the held card stay in view; the
+     notch points up at the slot the card is held in. */
+  .drawer {
+    grid-column: 2 / -1;
+    display: flex;
+    padding: 4px 6px 10px;
+  }
   .plate {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -270,6 +330,20 @@
     transform-origin: top center;
     box-shadow: var(--shadow-lift);
   }
+  .plate::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: clamp(8px, calc((100% + 12px) * var(--notch, 0.5) - 13px), calc(100% - 22px));
+    width: 14px;
+    height: 8px;
+    background: var(--plate);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+  /* Measured from inside its 5 px band, so it sits on the band rather than in it. */
+  .plate[data-reversed="false"]::before {
+    top: -13px;
+  }
   .plate:focus-within {
     box-shadow:
       var(--shadow-pop),
@@ -280,6 +354,7 @@
     background: var(--card);
     color: var(--card-ink);
     border-top: 5px solid var(--plate);
+    border-radius: 0 0 var(--r-1) var(--r-1);
     box-shadow: 0 1px 0 rgb(0 0 0 / 0.25);
     font-stretch: var(--stock);
   }
@@ -388,6 +463,25 @@
     }
     .card {
       min-height: 96px;
+    }
+    .pips {
+      display: flex;
+      flex-basis: 100%;
+      order: 1;
+      margin-top: 2px;
+    }
+    .row[data-held] {
+      grid-template-rows: none;
+    }
+    .row[data-held] > .label {
+      grid-row: auto;
+    }
+    .drawer {
+      grid-column: auto;
+      padding: 0 10px 10px;
+    }
+    .plate::before {
+      display: none;
     }
   }
 }

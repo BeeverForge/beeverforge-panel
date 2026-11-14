@@ -104,6 +104,8 @@ export function LogFeed({ events, follow = false, find, height = 360, empty, lab
 
   return (
     <div className={s.wrap}>
+      {/* A scrolling region a keyboard user must be able to reach and scroll (WCAG 2.1.1). */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
       <div ref={box} className={s.feed} style={{ height }} role="log" aria-label={label} aria-live={follow ? "polite" : undefined} tabIndex={0}>
         <div style={{ height: v.getTotalSize(), position: "relative" }}>
           {v.getVirtualItems().map((item) => (

@@ -44,7 +44,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
           <label className={s.label} htmlFor="token">
             Panel token
           </label>
-          <input id="token" className={s.input} type="password" autoComplete="off" value={value} onChange={(e) => setValue(e.target.value)} autoFocus />
+          <input id="token" className={s.input} type="password" autoComplete="off" value={value} onChange={(e) => setValue(e.target.value)} />
           <DialogActions>
             <Button tier="primary" type="submit" disabled={!value.trim()}>
               Sign in

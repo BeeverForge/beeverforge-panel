@@ -31,7 +31,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
           <Command label="Find" loop>
             <div className={s.inputRow}>
               <Icon name="search" size={15} />
-              <Command.Input className={s.input} placeholder="Find a card, a project or an action…" autoFocus />
+              <Command.Input className={s.input} placeholder="Find a card, a project or an action…" />
             </div>
             <Command.List className={s.list}>
               <Command.Empty className={s.empty}>Nothing matches. Card numbers work too: try “#3”.</Command.Empty>

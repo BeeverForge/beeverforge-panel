@@ -1,6 +1,6 @@
 // The tech lead on call for this line: what it told the floor, what it asks, the one action it
 // proposes, and a box to ask it something. Its conversation is pushed over the floor socket.
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMessages } from "../../live/useLiveQueries";
 import { askTechLead, answerQuestion, approveSuggestion } from "../../api/actions";
@@ -47,6 +47,15 @@ export function TechLead({ project }: { project: string }) {
   const pending = data?.pending ?? [];
   const sug = data?.suggestion;
 
+  // Opens on the newest message and follows new ones, until the reader scrolls back to read.
+  const box = useRef<HTMLOListElement>(null);
+  const pinned = useRef(true);
+  const newest = `${thread.length}:${thread.at(-1)?.ts ?? ""}:${pending.length}:${sug?.token ?? ""}`;
+  useLayoutEffect(() => {
+    const el = box.current;
+    if (el && pinned.current) el.scrollTop = el.scrollHeight;
+  }, [newest, msgs.isPending]);
+
   return (
     <section className={s.panel} aria-labelledby="tl-title">
       <h2 id="tl-title" className={s.panelTitle}>
@@ -62,7 +71,19 @@ export function TechLead({ project }: { project: string }) {
           The tech lead's conversation could not be read. {(msgs.error as Error).message}
         </Note>
       ) : (
-        <ol className={s.thread} aria-live="polite">
+        <ol
+          ref={box}
+          className={s.thread}
+          aria-live="polite"
+          aria-label="The tech lead's conversation"
+          // A scrolling region a keyboard user must be able to reach and scroll (WCAG 2.1.1).
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+          tabIndex={0}
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            pinned.current = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+          }}
+        >
           {!thread.length && !pending.length && <li className={s.quiet}>Nothing said yet. It speaks up when a card is picked up, opens a pull request, or stops.</li>}
           {thread.map((m, i) => (
             <li key={`${m.ts}${i}`} className={s.msg} data-who={m.kind === "said" ? "you" : m.kind === "answered" ? "you" : "tl"}>

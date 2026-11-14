@@ -235,19 +235,45 @@
   }
 
   @media (max-width: 1100px) {
-    .search span {
-      display: none;
+    /* Out of sight, still the button's name. */
+    .searchText {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
     .search {
       width: auto;
     }
     .nav span {
-      display: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
   }
   @media (max-width: 700px) {
     .top {
       padding: 0 12px;
+      gap: 2px;
+    }
+    .search {
+      width: 36px;
+      padding: 0;
+      justify-content: center;
+    }
+    .search kbd {
+      display: none;
+    }
+    .nav {
+      padding: 7px 8px;
+    }
+    .live {
+      padding: 0 8px;
     }
     .brand span {
       display: none;

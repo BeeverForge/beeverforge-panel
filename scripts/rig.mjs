@@ -1,11 +1,11 @@
-// Runs scripts/rig.sh where the platform can run: directly on Linux and macOS, and inside WSL on
+// Runs scripts/rig.bash where the platform can run: directly on Linux and macOS, and inside WSL on
 // Windows (the registry takes a POSIX file lock, so the API does not serve from Windows itself).
 import { spawnSync, spawn } from "node:child_process";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const script = resolve(here, "rig.sh");
+const script = resolve(here, "rig.bash");
 const command = process.argv[2] ?? "serve";
 const distro = process.env.PANEL_NEXT_WSL_DISTRO;
 

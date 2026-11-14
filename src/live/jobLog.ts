@@ -77,27 +77,30 @@ const EMPTY = { events: [] as JournalEvent[], link: "connecting" as LogLink };
 
 /** The live log of one run; `enabled: false` reads nothing and opens nothing. */
 export function useJobLog(project: string, issue: string, enabled = true) {
-  const feed = enabled && project && issue ? feedFor(project, issue) : null;
+  const on = Boolean(enabled && project && issue);
+  const feed = on ? feedFor(project, issue) : null;
 
   useEffect(() => {
-    if (!feed) return;
-    window.clearTimeout(feed.closeTimer);
-    feed.users += 1;
-    if (!feed.source) open(project, issue, feed);
+    if (!on) return;
+    // The registry's own entry, not the render's copy: the effect is what holds the connection.
+    const f = feedFor(project, issue);
+    window.clearTimeout(f.closeTimer);
+    f.users += 1;
+    if (!f.source) open(project, issue, f);
     return () => {
-      feed.users -= 1;
+      f.users -= 1;
       // A short grace, so moving between two views of the same run keeps one connection.
-      feed.closeTimer = window.setTimeout(() => {
-        if (feed.users === 0) {
-          feed.source?.close();
-          feed.source = null;
-          feed.events = [];
-          feed.link = "connecting";
+      f.closeTimer = window.setTimeout(() => {
+        if (f.users === 0) {
+          f.source?.close();
+          f.source = null;
+          f.events = [];
+          f.link = "connecting";
           feeds.delete(`${project}#${issue}`);
         }
       }, 4000);
     };
-  }, [feed, project, issue]);
+  }, [on, project, issue]);
 
   return useSyncExternalStore(
     (fn) => {

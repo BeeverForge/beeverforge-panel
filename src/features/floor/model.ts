@@ -7,6 +7,7 @@ import type { EngineJob, FloorVerdict, InboxItem, JournalEvent, ProjectRow } fro
 import { useEngine, useFloor, useInbox, useProjects } from "../../live/useLiveQueries";
 import { positionFromLog, positionOf, stationsFor, type Position, type Station } from "../../live/pipeline";
 import { useJobLog } from "../../live/jobLog";
+import { enteredAt } from "../answer/waiting";
 
 export interface Line {
   name: string;
@@ -34,8 +35,10 @@ export function placeOf(job: EngineJob | undefined, stations: Station[], events:
   return positionOf(job, stations, fromLog?.at);
 }
 
-/** The time each station of the current run took, from its `state` lines; the last one runs on. */
-export function stationTimes(events: JournalEvent[] | undefined, stations: Station[]) {
+/** The time each station of the current run took, from its `state` lines; the last one runs on.
+ *  A run held at a station by a state that names none (a decision parks as `on_hold`) is timed
+ *  at `at` from the moment it entered that state. */
+export function stationTimes(events: JournalEvent[] | undefined, stations: Station[], here?: number) {
   const out = new Map<number, { from: number; to: number | null }>();
   if (!events?.length) return out;
   let start = 0;
@@ -56,6 +59,10 @@ export function stationTimes(events: JournalEvent[] | undefined, stations: Stati
     const prev = out.get(idx);
     out.set(idx, { from: prev?.from ?? from, to });
   });
+  if (here !== undefined && here >= 0 && !out.has(here)) {
+    const entered = enteredAt(events);
+    if (entered) out.set(here, { from: entered, to: null });
+  }
   return out;
 }
 

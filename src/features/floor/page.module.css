@@ -8,6 +8,19 @@
   .main {
     min-width: 0;
   }
+  .lineActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+  .addressRead {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px dashed var(--slot);
+    border-radius: var(--r-3);
+    color: var(--text-2);
+    font-size: var(--t-13);
+  }
   @media (max-width: 1180px) {
     .grid {
       grid-template-columns: minmax(0, 1fr);

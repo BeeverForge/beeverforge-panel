@@ -2,21 +2,23 @@
 // the slot of the station it is at and travels to the next one when the server says it moved; a
 // card that needs a person turns over to its red side, with the answer on it.
 import { Link } from "@tanstack/react-router";
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, LayoutGroup, m, useReducedMotion } from "motion/react";
 import * as Switch from "@radix-ui/react-switch";
 import type { JournalEvent } from "../../api/types";
 import { STATIONS, nowOf, type Station } from "../../live/pipeline";
 import { duration, money, short, useNow } from "../../live/clock";
 import { Skeleton, Note, uiStyles } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
+import { capitalise } from "../../ui/text";
 import { Answers, KICKER, kindOf, questionOf } from "../answer/Answers";
 import { usePickup } from "../answer/useAnswer";
+import { WaitedFor } from "../answer/WaitedFor";
+import { waitedFrom } from "../answer/waiting";
 import { placeOf, stationTimes, useLineLog, type Line } from "./model";
 import s from "./floor.module.css";
 
 /** Where a station sits among the cabinet's columns (every line shares the eight headers). */
 const COL = new Map(STATIONS.map((st, i) => [st.key, i]));
-const PLATE_SPAN = 5;
 const STREAM_CAP = 4;
 
 export function Cabinet({ lines, loading, error }: { lines: Line[]; loading: boolean; error: unknown }) {
@@ -31,7 +33,7 @@ export function Cabinet({ lines, loading, error }: { lines: Line[]; loading: boo
   let streamed = 0;
   return (
     <section className={s.cabinet} aria-label="Production lines">
-      <div className={s.head} role="row">
+      <div className={s.head} aria-hidden="true">
         <div className={s.headCell}>Line</div>
         {STATIONS.map((st) => (
           <div key={st.key} className={s.headCell} title={st.what}>
@@ -80,26 +82,17 @@ function LineRow({ line, stream, reduce }: { line: Line; stream: boolean; reduce
   const now = useNow();
   const kind = kindOf(line.need, job);
   const held = Boolean(job && position?.mode === "held" && kind && kind !== "rate_limit");
-  const times = stationTimes(events, stations);
+  const running = Boolean(job && position?.mode === "running" && kind !== "rate_limit");
   // A state that names no station (a run just starting) still puts its card on the line.
   if (position && position.at < 0) position.at = 0;
+  const times = stationTimes(events, stations, position?.at);
   const atKey = position ? stations[position.at]?.key : undefined;
   const atCol = atKey ? COL.get(atKey)! : -1;
-  const plateStart = held ? Math.max(0, Math.min(atCol, STATIONS.length - PLATE_SPAN)) : -1;
   const level = line.verdict?.level ?? "unknown";
 
   const cells: React.ReactNode[] = [];
   for (let c = 0; c < STATIONS.length; c++) {
     const st = STATIONS[c]!;
-    if (held && c === plateStart) {
-      cells.push(
-        <div key="plate" className={s.cell} style={{ gridColumn: `span ${PLATE_SPAN}` }}>
-          <Plate line={line} kind={kind!} atLabel={stations[position!.at]?.label ?? "the start"} reduce={reduce} />
-        </div>,
-      );
-      c += PLATE_SPAN - 1;
-      continue;
-    }
     if (st.key === "planning" && line.singleAgent) {
       cells.push(
         <div key={st.key} className={`${s.cell} ${s.na}`} title="A single-agent line has no separate planner">
@@ -113,7 +106,7 @@ function LineRow({ line, stream, reduce }: { line: Line; stream: boolean; reduce
       const t = times.get(idx);
       cells.push(
         <div key={st.key} className={`${s.cell} ${s.done}`}>
-          <i className={s.tick} aria-label={`${st.label} passed`}>
+          <i className={s.tick} role="img" aria-label={`${st.label} passed`}>
             <Icon name="check" size={11} strokeWidth={2.2} />
           </i>
           {t?.to && <span className={s.took}>{duration(t.to - t.from)}</span>}
@@ -124,7 +117,7 @@ function LineRow({ line, stream, reduce }: { line: Line; stream: boolean; reduce
     if (job && position && idx === position.at) {
       cells.push(
         <div key={st.key} className={s.cell}>
-          <Card line={line} events={events} station={st} since={times.get(idx)?.from} now={now} kind={kind} reduce={reduce} />
+          <Card line={line} events={events} station={st} since={times.get(idx)?.from} now={now} kind={kind} held={held} reduce={reduce} />
         </div>,
       );
       continue;
@@ -146,19 +139,28 @@ function LineRow({ line, stream, reduce }: { line: Line; stream: boolean; reduce
     );
   }
 
+  // A held card keeps its own slot; what it asks opens beneath the stations, notched under it.
+  if (held) {
+    cells.push(
+      <div key="plate" className={s.drawer} style={{ "--notch": (atCol + 0.5) / STATIONS.length } as React.CSSProperties}>
+        <Plate line={line} kind={kind!} atLabel={stations[position!.at]?.label ?? "the start"} events={events} reduce={reduce} />
+      </div>,
+    );
+  }
+
+  const pips = job && position
+    ? stations.map((st, i) => ({ key: st.key, label: st.label, state: i < position.at ? "passed" : i > position.at ? "ahead" : held ? "held" : "here" }))
+    : null;
+
   return (
     <div className={s.row} data-held={held || undefined} data-idle={!job || undefined}>
-      <LineLabel line={line} atLabel={atKey ? STATIONS[atCol]?.label : undefined} />
+      <LineLabel line={line} atLabel={atKey ? STATIONS[atCol]?.label : undefined} running={running} pips={pips} />
       {cells}
     </div>
   );
 }
 
-function capitalise(text: string) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-function LineLabel({ line, atLabel }: { line: Line; atLabel?: string }) {
+function LineLabel({ line, atLabel, running, pips }: { line: Line; atLabel?: string; running: boolean; pips: { key: string; label: string; state: string }[] | null }) {
   const pickup = usePickup();
   const enabled = line.row.enabled !== false;
   const level = line.verdict?.level ?? "unknown";
@@ -167,13 +169,21 @@ function LineLabel({ line, atLabel }: { line: Line; atLabel?: string }) {
       <Link to="/p/$project" params={{ project: line.name }} className={s.name}>
         {line.name}
       </Link>
-      <span className={s.word} data-level={level}>
+      <span className={s.word} data-level={level} data-running={running || undefined}>
         {line.verdict?.short?.toLowerCase() ?? "reading…"}
       </span>
       {line.job && atLabel && (
         <span className={s.where}>
           #{line.job.issue} at {atLabel}
         </span>
+      )}
+      {pips && (
+        // The cabinet's stations in small, for the narrow screen where the slots are folded away.
+        <ol className={s.pips} aria-hidden="true">
+          {pips.map((p) => (
+            <li key={p.key} data-state={p.state} title={p.label} />
+          ))}
+        </ol>
       )}
       <label className={s.pickup}>
         <Switch.Root
@@ -213,6 +223,7 @@ function Card({
   since,
   now,
   kind,
+  held,
   reduce,
 }: {
   line: Line;
@@ -221,6 +232,7 @@ function Card({
   since?: number;
   now: number;
   kind: ReturnType<typeof kindOf>;
+  held: boolean;
   reduce: boolean;
 }) {
   const job = line.job!;
@@ -231,13 +243,14 @@ function Card({
   const paused = kind === "rate_limit";
   const merging = job.action?.kind === "merge_wait" && (job.action.auto || job.action.working);
   return (
-    <motion.article
+    <m.article
       layoutId={job.run_id ?? job.workflow_id ?? line.name}
       layout={!reduce}
       transition={{ type: "spring", stiffness: 420, damping: 38, mass: 0.9 }}
       className={s.card}
       data-paused={paused || undefined}
-      aria-label={`#${job.issue} ${job.title ?? ""}, at ${station.label}`}
+      data-held={held || undefined}
+      aria-label={`#${job.issue} ${job.title ?? ""}, ${held ? "held" : "at"} ${station.label}`}
     >
       <div className={s.cardTop}>
         <Link to="/p/$project" params={{ project: line.name }} className={s.cardNo}>
@@ -247,7 +260,7 @@ function Card({
       </div>
       <p className={s.cardTitle}>{job.title || "…"}</p>
       <AnimatePresence mode="popLayout" initial={false}>
-        <motion.div
+        <m.div
           key={detail.line ?? detail.gates?.map((g) => g.name + g.passed).join() ?? station.key}
           className={s.cardDetail}
           initial={reduce ? false : { opacity: 0, y: 4 }}
@@ -255,7 +268,9 @@ function Card({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22 }}
         >
-          {paused ? (
+          {held && kind ? (
+            <span className={s.heldLine}>{KICKER[kind]} · answer below</span>
+          ) : paused ? (
             <span className={s.pausedLine}>
               <Icon name="clock" size={11} /> paused — retries by itself
             </span>
@@ -265,14 +280,16 @@ function Card({
             <span className={s.gates}>
               {detail.gates.map((g) => (
                 <span key={g.name} data-passed={g.passed}>
-                  {g.name} {g.passed ? "✓" : "✗"}
+                  {g.name}
+                  <Icon name={g.passed ? "check" : "close"} size={10} strokeWidth={2.4} />
+                  <span className="sr-only">{g.passed ? "passed" : "failed"}</span>
                 </span>
               ))}
             </span>
           ) : (
             <span>{detail.line ?? nowOf(job.state)}</span>
           )}
-        </motion.div>
+        </m.div>
       </AnimatePresence>
       <div className={s.cardFoot}>
         <span className={s.band} aria-hidden="true" />
@@ -282,23 +299,20 @@ function Card({
         </span>
       </div>
       {paused && <Answers project={line.name} issue={job.issue ?? ""} kind="rate_limit" need={line.need} job={job} />}
-    </motion.article>
+    </m.article>
   );
 }
 
-function Plate({ line, kind, atLabel, reduce }: { line: Line; kind: NonNullable<ReturnType<typeof kindOf>>; atLabel: string; reduce: boolean }) {
+function Plate({ line, kind, atLabel, events, reduce }: { line: Line; kind: NonNullable<ReturnType<typeof kindOf>>; atLabel: string; events: JournalEvent[]; reduce: boolean }) {
   const job = line.job!;
   const now = useNow();
-  const parkedAt = (line.need?.parked_at as string | undefined) ?? job.action?.parked_at ?? undefined;
-  const waited = parkedAt ? now - new Date(parkedAt).getTime() : null;
+  const waited = waitedFrom(line.need?.parked_at ?? job.action?.parked_at, events);
   const review = line.need?.review;
   // Only the oldest ask is turned over to red; the rest wait on their stock with a red band, so
   // the reversed plate always means "this one first".
   const reversed = line.first;
   return (
-    <motion.article
-      layoutId={job.run_id ?? job.workflow_id ?? line.name}
-      layout={!reduce}
+    <m.article
       initial={reduce ? false : { rotateX: -70, opacity: 0.6 }}
       animate={{ rotateX: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -311,17 +325,16 @@ function Plate({ line, kind, atLabel, reduce }: { line: Line; kind: NonNullable<
           <b>{KICKER[kind]}</b> · #{job.issue} {job.title}
         </span>
         <span className={s.plateWhen}>
-          held at {atLabel}
-          {waited != null && waited > 0 ? ` · ${duration(waited)}` : ""}
+          held at {atLabel} · <WaitedFor waited={waited} now={now} />
         </span>
       </div>
       <p className={s.question}>{questionOf(kind, line.need, job)}</p>
-      {kind === "merge" && review?.word && (
+      {kind === "merge" && review?.word && review.clause && (
         <p className={s.verdict} data-level={review.level}>
-          Review: {review.word.toLowerCase()} — {review.clause}
+          {capitalise(review.clause)}
         </p>
       )}
       <Answers project={line.name} issue={job.issue ?? ""} kind={kind} need={line.need} job={job} onPlate={reversed} />
-    </motion.article>
+    </m.article>
   );
 }

@@ -87,10 +87,18 @@ function verdictOf(j: Job) {
   return { word: r.word, level: r.level, clause: r.clause, points: r.points };
 }
 
+/** When a job entered the state it holds: what "the oldest ask" is measured by. */
+function heldSince(j: Job) {
+  for (let i = j.events.length - 1; i >= 0; i--) if (j.events[i]!.kind === "state") return j.events[i]!.ts;
+  return j.start_time;
+}
+
+/** The jobs that wait on a person, the longest-waiting first. */
+const waiting = (jobs: Job[]) => jobs.filter(waitsOnAPerson).sort((a, b) => heldSince(a).localeCompare(heldSince(b)));
+
 export function inbox(f: Factory) {
   const out: Record<string, unknown>[] = [];
-  for (const j of f.jobs) {
-    if (!waitsOnAPerson(j)) continue;
+  for (const j of waiting(f.jobs)) {
     const act = j.action ?? {};
     const base = {
       project: j.project,
@@ -199,7 +207,7 @@ function causes(f: Factory, project = ""): Cause[] {
       });
     }
   }
-  const needs = jobs.filter(waitsOnAPerson).filter((j) => j.action?.kind !== "rate_limit");
+  const needs = waiting(jobs).filter((j) => j.action?.kind !== "rate_limit");
   if (needs.length) {
     const first = needs[0]!;
     out.push({

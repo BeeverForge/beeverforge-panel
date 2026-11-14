@@ -91,9 +91,9 @@ export function CostsPage() {
       </header>
 
       {metrics.isPending ? (
-        <div className={s.tiles}>
+        <div className={s.figures}>
           {[0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} w="100%" h={74} />
+            <Skeleton key={i} w={120} h={48} style={{ marginRight: 28 }} />
           ))}
         </div>
       ) : metrics.isError || !d ? (
@@ -122,11 +122,11 @@ export function CostsPage() {
             )}
           </div>
 
-          <dl className={s.tiles}>
-            <Tile k="Spent" v={money(view.cost)} />
-            <Tile k="Tasks" v={String(view.count)} />
-            <Tile k="Per task" v={money(view.count ? view.cost / view.count : 0)} />
-            <Tile k="Time per task" v={duration(view.avgWall ? view.avgWall * 1000 : null)} />
+          <dl className={s.figures}>
+            <Figure k="spent" v={money(view.cost)} />
+            <Figure k="tasks" v={String(view.count)} />
+            <Figure k="per task" v={money(view.count ? view.cost / view.count : 0)} />
+            <Figure k="time per task" v={duration(view.avgWall ? view.avgWall * 1000 : null)} />
           </dl>
 
           <div className={s.charts}>
@@ -199,9 +199,10 @@ export function CostsPage() {
   );
 }
 
-function Tile({ k, v }: { k: string; v: string }) {
+/** A figure and what it counts, read value first. */
+function Figure({ k, v }: { k: string; v: string }) {
   return (
-    <div className={s.tile}>
+    <div className={s.figure}>
       <dt>{k}</dt>
       <dd>{v}</dd>
     </div>
@@ -242,11 +243,11 @@ function AutonomyBlock({ a }: { a: Autonomy }) {
   return (
     <section className={s.box}>
       <h2>{L.title}</h2>
-      <dl className={s.tiles}>
-        <Tile k={L.yield ?? "merged untouched"} v={pct} />
-        <Tile k={L.rework ?? "code passes per card"} v={a.rework_rate == null ? "—" : a.rework_rate.toFixed(2)} />
-        <Tile k={L.measured ?? "measured"} v={String(a.measured ?? 0)} />
-        <Tile k={L.before ?? "before the record"} v={String(a.before_the_record?.length ?? 0)} />
+      <dl className={s.facts}>
+        <Figure k={L.yield ?? "merged untouched"} v={pct} />
+        <Figure k={L.rework ?? "code passes per card"} v={a.rework_rate == null ? "—" : a.rework_rate.toFixed(2)} />
+        <Figure k={L.measured ?? "measured"} v={String(a.measured ?? 0)} />
+        <Figure k={L.before ?? "before the record"} v={String(a.before_the_record?.length ?? 0)} />
       </dl>
       <p className={s.said}>
         {said.headline} {said.rework} {said.before_the_record}

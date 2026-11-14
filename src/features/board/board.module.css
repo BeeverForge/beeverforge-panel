@@ -65,7 +65,6 @@
     padding: 10px;
     background: var(--cabinet);
     border: 1px solid var(--rule);
-    border-top: 3px solid var(--tone);
     border-radius: var(--r-3);
     transition: background var(--dur-1), opacity var(--dur-2);
   }
@@ -141,7 +140,7 @@
     padding: 8px 10px 9px;
     border: 0;
     border-top: 3px solid var(--tone, var(--slot));
-    border-radius: var(--r-1);
+    border-radius: 0 0 var(--r-1) var(--r-1);
     background: var(--card);
     color: var(--card-ink);
     font-stretch: var(--stock);

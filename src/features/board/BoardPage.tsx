@@ -1,7 +1,7 @@
 // A project's board, as its tracker holds it: the server names the columns and where each card is.
 // A person moves cards into the queue or back to the backlog; the columns after that are the
 // factory's, and the server says so if a card is dropped there.
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { DndContext, PointerSensor, useDraggable, useDroppable, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
@@ -52,6 +52,7 @@ export function BoardPage() {
     },
   });
   const writes = useBoardWrites(project);
+  const [asked, setAsked] = useState(false);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
   const now = useNow();
 
@@ -96,7 +97,8 @@ export function BoardPage() {
         </div>
         <div className={s.headActions}>
           <span className={s.poll}>{board.data?.poll_seconds ? `Read every ${board.data.poll_seconds}s` : board.data ? "Read on change" : ""}</span>
-          <Button icon="refresh" tier="quiet" onClick={() => void board.refetch()} busy={board.isFetching && !board.isPending}>
+          {/* Busy only for a read somebody asked for: the board's own polling never flickers it. */}
+          <Button icon="refresh" tier="quiet" onClick={() => (setAsked(true), void board.refetch().finally(() => setAsked(false)))} busy={asked}>
             Read again
           </Button>
           <Button icon="plus" tier="primary" onClick={() => void navigate({ search: { create: true } })}>
@@ -122,7 +124,7 @@ export function BoardPage() {
           The board could not be read — this is not evidence that it is empty. {board.error instanceof Error ? board.error.message : "Read it again in a moment."}
         </Note>
       ) : (
-        <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+        <DndContext sensors={sensors} onDragEnd={onDragEnd} accessibility={{ screenReaderInstructions: { draggable: "Enter opens the card. The left and right arrow keys move it to the next column." } }}>
           <div className={s.columns}>
             {columns.map((col) => (
               <Column key={col} name={col} cards={cards.filter((c) => c.column === col)} now={now} onOpen={open} onMove={moveBy} />
@@ -149,7 +151,7 @@ function Column({ name, cards, now, onOpen, onMove }: { name: string; cards: Boa
         <span className={s.colCount}>{cards.length}</span>
       </header>
       {active && !stage.person && <p className={s.factoryHint}>The factory moves cards here</p>}
-      <ol className={s.cards} role="list">
+      <ol className={s.cards}>
         {cards.length === 0 ? (
           <li className={s.colEmpty}>{stage.key === "todo" ? "Empty — the next pickup has nothing to take" : "Read fine — nothing here"}</li>
         ) : (
@@ -164,12 +166,11 @@ function Card({ card, now, onOpen, onMove }: { card: BoardCard; now: number; onO
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: card.ref ?? "" });
   const style = transform ? { transform: `translate(${transform.x}px, ${transform.y}px)` } : undefined;
   return (
-    <li role="listitem" ref={setNodeRef} style={style} className={s.card} data-dragging={isDragging || undefined}>
+    <li ref={setNodeRef} style={style} className={s.card} data-dragging={isDragging || undefined}>
       <button
         type="button"
         className={s.cardBtn}
         data-card={card.ref}
-        aria-label={`#${card.ref}: ${card.title}. Enter opens it; left and right arrows move it.`}
         onClick={() => onOpen(card.ref ?? "")}
         onKeyDown={(e) => {
           if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
