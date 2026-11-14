@@ -1,0 +1,126 @@
+@layer components {
+  .page {
+    padding-top: 16px;
+  }
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .head h1 {
+    font-size: var(--t-24);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .all {
+    font-size: var(--t-13);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .list {
+    position: sticky;
+    top: calc(var(--topbar) + 12px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: calc(100dvh - var(--topbar) - 40px);
+  }
+  .filters {
+    display: flex;
+    gap: 6px;
+  }
+  .filters input,
+  .filters select,
+  .find {
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    background: var(--cabinet);
+    color: var(--text);
+    min-width: 0;
+  }
+  .filters input {
+    flex: 1;
+  }
+  .rows {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 10px;
+    border-radius: var(--r-2);
+    color: var(--text);
+    border: 1px solid transparent;
+  }
+  .row:hover {
+    text-decoration: none;
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+  }
+  .row[aria-current="page"] {
+    background: var(--cabinet);
+    border-color: var(--rule-strong);
+  }
+  .rowTop {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: var(--t-13);
+  }
+  .rowTop span {
+    color: var(--text-3);
+    font-size: var(--t-12);
+  }
+  .rowSub {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: var(--t-12);
+    color: var(--text-2);
+  }
+  .detail {
+    min-width: 0;
+  }
+  .detailHead {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .detailHead h2 {
+    font-size: var(--t-18);
+    font-weight: 600;
+  }
+  .sub {
+    color: var(--text-3);
+    font-size: var(--t-12);
+    margin-bottom: 6px;
+  }
+  .more {
+    border: 0;
+    background: none;
+    color: var(--link);
+    cursor: pointer;
+    padding: 0;
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .list {
+      position: static;
+      max-height: 320px;
+    }
+  }
+}

@@ -57,7 +57,8 @@ export function Shell() {
   const [theme, toggleTheme] = useTheme();
   const [palette, setPalette] = useState(false);
   const path = useRouterState({ select: (st) => st.location.pathname });
-  const onFloor = path === "/" || /^\/p\/[^/]+\/?$/.test(path);
+  // The line page states its own line's verdict in its header; the bar is the whole floor's.
+  const onFloor = path === "/";
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -105,7 +106,7 @@ export function Shell() {
           <kbd>{navigator.platform.includes("Mac") ? "⌘K" : "Ctrl K"}</kbd>
         </button>
       </header>
-      {onFloor && <FloorBar project={path.startsWith("/p/") ? decodeURIComponent(path.split("/")[2] ?? "") : ""} />}
+      {onFloor && <FloorBar project="" />}
       <BuildSplit />
       <main id="main" className={s.main}>
         <Outlet />

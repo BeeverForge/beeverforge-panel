@@ -1,0 +1,101 @@
+@layer components {
+  .wrap {
+    position: relative;
+  }
+  .feed {
+    overflow: auto;
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-3);
+    font-size: var(--t-12);
+    line-height: 1.5;
+  }
+  .line {
+    display: grid;
+    grid-template-columns: 64px 70px minmax(0, 1fr);
+    gap: 10px;
+    padding: 2px 12px;
+  }
+  .line:hover {
+    background: color-mix(in srgb, var(--text) 4%, transparent);
+  }
+  .time {
+    color: var(--text-4);
+    font-variant-numeric: tabular-nums;
+  }
+  .kind {
+    color: var(--text-3);
+    font-weight: 600;
+  }
+  .msg {
+    color: var(--text-2);
+    overflow-wrap: anywhere;
+  }
+  .msg mark {
+    background: var(--run-wash);
+    color: var(--text);
+    outline: 1px solid var(--run);
+    border-radius: 2px;
+  }
+  .line[data-kind="state"] .msg b {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .line[data-kind="state"] .kind {
+    color: var(--run);
+  }
+  .line[data-kind="validation"] .kind {
+    color: var(--ok);
+  }
+  .line[data-kind="review"] .kind,
+  .line[data-kind="pr"] .kind {
+    color: var(--link);
+  }
+  .line[data-kind="warning"] .kind {
+    color: var(--run);
+  }
+  .line[data-kind="error"] .kind,
+  .line[data-kind="error"] .msg {
+    color: var(--alarm);
+  }
+  .cost {
+    color: var(--text-4);
+  }
+  .findings {
+    display: grid;
+    gap: 2px;
+    margin: 4px 0 2px;
+  }
+  .findings b {
+    text-transform: lowercase;
+    color: var(--run);
+  }
+  .findings li[data-sev="high"] b {
+    color: var(--alarm);
+  }
+  .findings code {
+    color: var(--text-3);
+  }
+  .empty {
+    padding: 18px 14px;
+    border: 1px dashed var(--slot);
+    border-radius: var(--r-3);
+    color: var(--text-3);
+  }
+  .jump {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    height: 28px;
+    padding: 0 12px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--rule-strong);
+    background: var(--raised);
+    color: var(--text);
+    font-size: var(--t-12);
+    font-weight: 600;
+    box-shadow: var(--shadow-lift);
+    cursor: pointer;
+  }
+}

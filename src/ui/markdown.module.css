@@ -1,0 +1,60 @@
+@layer components {
+  .md {
+    font-size: var(--t-14);
+    line-height: 1.55;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+  .md > * + * {
+    margin-top: 0.7em;
+  }
+  .md h1,
+  .md h2,
+  .md h3 {
+    font-size: var(--t-14);
+    font-weight: 700;
+    margin-top: 1.2em;
+  }
+  .md ul,
+  .md ol {
+    padding-left: 1.3em;
+    list-style: disc;
+  }
+  .md ol {
+    list-style: decimal;
+  }
+  .md li + li {
+    margin-top: 0.25em;
+  }
+  .md code {
+    padding: 1px 4px;
+    border-radius: var(--r-1);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+  .md pre {
+    overflow: auto;
+    padding: 10px 12px;
+    border-radius: var(--r-2);
+    background: var(--ground);
+  }
+  .md pre code {
+    padding: 0;
+    background: none;
+  }
+  .md blockquote {
+    padding-left: 12px;
+    border-left: 2px solid var(--slot);
+    color: var(--text-2);
+  }
+  .md table {
+    border-collapse: collapse;
+  }
+  .md th,
+  .md td {
+    padding: 4px 8px;
+    border: 1px solid var(--rule);
+  }
+  .md input[type="checkbox"] {
+    margin-right: 6px;
+  }
+}

@@ -426,6 +426,12 @@ server.on("upgrade", (req, socket, head) => {
   socket.destroy();
 });
 
+// SIM_FORCE="tidepool-mobile=decision,quarry-api=prod_approval" sets each line's next run.
+for (const pair of (process.env.SIM_FORCE ?? "").split(",").filter(Boolean)) {
+  const [project, outcome] = pair.split("=");
+  if (project && outcome) factory.force(project.trim(), outcome.trim() as Outcome);
+}
+
 await factory.refresh();
 setInterval(() => factory.tick(), 250);
 setInterval(() => void factory.refresh(), 4000);

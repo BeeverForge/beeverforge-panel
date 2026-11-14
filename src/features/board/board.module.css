@@ -1,0 +1,419 @@
+@layer components {
+  .page {
+    padding-top: 16px;
+  }
+  .head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .titles h1 {
+    font-size: var(--t-24);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 6px 12px;
+    border-radius: var(--r-pill);
+    color: var(--text-2);
+    font-size: var(--t-13);
+    font-weight: 500;
+  }
+  .tab:hover {
+    color: var(--text);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+  }
+  .tab[aria-selected="true"] {
+    color: var(--ground);
+    background: var(--text);
+  }
+  .headActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .poll {
+    font-size: var(--t-12);
+    color: var(--text-3);
+  }
+
+  .columns {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(178px, 1fr);
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    min-height: 60vh;
+  }
+  .column {
+    --tone: var(--slot);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px;
+    background: var(--cabinet);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--tone);
+    border-radius: var(--r-3);
+    transition: background var(--dur-1), opacity var(--dur-2);
+  }
+  .column[data-stage="todo"] {
+    --tone: var(--text-2);
+  }
+  .column[data-stage="progress"],
+  .column[data-stage="review"] {
+    --tone: var(--run);
+  }
+  .column[data-stage="needsReview"],
+  .column[data-stage="needsAction"] {
+    --tone: var(--alarm);
+  }
+  .column[data-stage="done"] {
+    --tone: var(--ok);
+  }
+  .column[data-over] {
+    background: color-mix(in srgb, var(--text) 5%, var(--cabinet));
+  }
+  .column[data-dragging="factory"] {
+    opacity: 0.55;
+  }
+  .colHead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 2px 4px;
+  }
+  .colHead h2 {
+    font-size: var(--t-13);
+    font-weight: 600;
+  }
+  .colDot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--tone);
+  }
+  .colCount {
+    margin-left: auto;
+    font-size: var(--t-12);
+    color: var(--text-3);
+  }
+  .factoryHint {
+    font-size: var(--t-11);
+    color: var(--text-3);
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .colEmpty {
+    padding: 14px 10px;
+    border: 1px dashed var(--slot);
+    border-radius: var(--r-1);
+    color: var(--text-3);
+    font-size: var(--t-12);
+  }
+  .card {
+    position: relative;
+  }
+  .card[data-dragging] {
+    z-index: 5;
+    box-shadow: var(--shadow-pop);
+  }
+  .cardBtn {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    padding: 8px 10px 9px;
+    border: 0;
+    border-top: 3px solid var(--tone, var(--slot));
+    border-radius: var(--r-1);
+    background: var(--card);
+    color: var(--card-ink);
+    font-stretch: var(--stock);
+    text-align: left;
+    cursor: grab;
+    touch-action: none;
+  }
+  .card[data-dragging] .cardBtn {
+    cursor: grabbing;
+  }
+  .cardBtn:hover {
+    box-shadow: 0 0 0 1px var(--rule-strong);
+  }
+  .cardTop {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--t-11);
+    color: var(--card-3);
+  }
+  .ref {
+    font-weight: 700;
+    color: var(--card-2);
+  }
+  .cardTitle {
+    font-size: var(--t-13);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .labels span {
+    padding: 1px 6px;
+    border-radius: var(--r-pill);
+    background: color-mix(in srgb, var(--card-ink) 8%, transparent);
+    font-size: var(--t-11);
+  }
+
+  /* drawers */
+  .drawerBody {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .cardMeta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .stateChip {
+    padding: 2px 9px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--rule-strong);
+    font-size: var(--t-12);
+    font-weight: 600;
+  }
+  .stateChip[data-state="open"] {
+    color: var(--ok);
+    border-color: color-mix(in srgb, var(--ok) 50%, transparent);
+  }
+  .stateChip[data-state="merged"] {
+    color: var(--link);
+  }
+  .heldBy {
+    font-size: var(--t-12);
+    font-weight: 600;
+  }
+  .sub {
+    color: var(--text-3);
+    font-size: var(--t-12);
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .h3 {
+    font-size: var(--t-13);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .thread {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .thread > li {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-3);
+  }
+  .commentHead {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: var(--t-12);
+    color: var(--text-3);
+  }
+  .commentHead b {
+    color: var(--text);
+  }
+  .commentBox {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .diff {
+    max-height: 420px;
+    overflow: auto;
+    margin: 0;
+    padding: 10px 0;
+    border-radius: var(--r-3);
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: var(--t-12);
+    line-height: 1.5;
+  }
+  .diff span {
+    display: block;
+    padding: 0 12px;
+    white-space: pre;
+  }
+  .diff [data-line="add"] {
+    background: var(--ok-wash);
+    color: var(--ok);
+  }
+  .diff [data-line="del"] {
+    background: var(--alarm-wash);
+    color: var(--alarm);
+  }
+  .diff [data-line="hunk"] {
+    color: var(--link);
+  }
+  .diff [data-line="file"] {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .preview {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-3);
+  }
+  .preview p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .services {
+    display: grid;
+    gap: 4px;
+    font-size: var(--t-13);
+  }
+  .services li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .open {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 10px;
+    border-radius: var(--r-2);
+    background: var(--text);
+    color: var(--ground);
+    font-size: var(--t-12);
+    font-weight: 600;
+  }
+  .open:hover {
+    text-decoration: none;
+  }
+
+  /* the card form */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .modeRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+  .link {
+    border: 0;
+    background: none;
+    color: var(--link);
+    font-size: var(--t-12);
+    cursor: pointer;
+    padding: 0;
+  }
+  .criteria {
+    border: 0;
+    padding: 0;
+    margin: 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .criterion {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+  .remove {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    flex: none;
+    border: 0;
+    border-radius: var(--r-2);
+    background: none;
+    color: var(--text-3);
+    cursor: pointer;
+  }
+  .remove:hover {
+    color: var(--alarm);
+  }
+  .gate {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 12px;
+    border-radius: var(--r-3);
+    border: 1px dashed var(--slot);
+    color: var(--text-2);
+    font-size: var(--t-13);
+  }
+  .gate[data-state="ok"] {
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--ok) 50%, transparent);
+    color: var(--text);
+  }
+  .gate[data-state="ok"] svg {
+    color: var(--ok);
+  }
+  .gate[data-state="refused"] {
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--run) 55%, transparent);
+    background: var(--run-wash);
+    color: var(--text);
+  }
+  .where {
+    display: flex;
+    gap: 6px;
+    border: 0;
+    padding: 0;
+    margin: 14px 0 0;
+  }
+
+  @media (max-width: 700px) {
+    .columns {
+      grid-auto-columns: 82vw;
+      scroll-snap-type: x mandatory;
+    }
+    .column {
+      scroll-snap-align: start;
+    }
+  }
+}
