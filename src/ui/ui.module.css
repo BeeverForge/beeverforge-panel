@@ -1,0 +1,199 @@
+@layer components {
+  /* ── buttons: three tiers — primary decides, plain redirects, quiet ends ─────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 11px;
+    border-radius: var(--r-2);
+    border: 1px solid var(--rule-strong);
+    background: transparent;
+    color: var(--text);
+    font-size: var(--t-12);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background var(--dur-1) var(--ease-out),
+      border-color var(--dur-1) var(--ease-out),
+      color var(--dur-1) var(--ease-out),
+      opacity var(--dur-1);
+  }
+  .btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    border-color: var(--text-3);
+  }
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .primary {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--ground);
+  }
+  .primary:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--text) 86%, var(--ground));
+    border-color: transparent;
+  }
+  .quiet {
+    border-color: transparent;
+    color: var(--text-2);
+  }
+  .quiet:hover:not(:disabled) {
+    color: var(--text);
+  }
+  .sm {
+    height: 26px;
+    padding: 0 9px;
+  }
+  .icon {
+    width: 32px;
+    padding: 0;
+  }
+  .busy {
+    cursor: progress;
+  }
+  .spinner {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    border-right-color: transparent;
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  /* ── dots and chips ───────────────────────────────────────────────────────────────────── */
+  .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex: none;
+    background: var(--idle);
+  }
+  .dot[data-tone="run"] {
+    background: var(--run);
+  }
+  .dot[data-tone="ok"] {
+    background: var(--ok);
+  }
+  .dot[data-tone="alarm"] {
+    background: var(--alarm);
+  }
+  .dot[data-tone="clock"] {
+    background: var(--clock);
+  }
+  .dot[data-pulse="true"] {
+    box-shadow: 0 0 0 0 currentColor;
+    animation: breathe 2.4s var(--ease-out) infinite;
+  }
+  @keyframes breathe {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--run) 55%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 6px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 26px;
+    padding: 0 11px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-pill);
+    font-size: var(--t-12);
+    color: var(--text-2);
+    white-space: nowrap;
+  }
+  .chip b {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ── loading: shapes that match what will land ─────────────────────────────────────────── */
+  .sk {
+    display: block;
+    border-radius: var(--r-1);
+    background: linear-gradient(90deg, var(--raised) 0%, color-mix(in srgb, var(--raised) 60%, var(--slot)) 50%, var(--raised) 100%);
+    background-size: 220% 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
+  @keyframes shimmer {
+    from {
+      background-position: 120% 0;
+    }
+    to {
+      background-position: -100% 0;
+    }
+  }
+
+  /* ── an honest empty / unread line ───────────────────────────────────────────────────── */
+  .note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px dashed var(--slot);
+    border-radius: var(--r-3);
+    color: var(--text-2);
+    font-size: var(--t-13);
+    line-height: 1.45;
+  }
+  .note[data-tone="alarm"] {
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--alarm) 45%, transparent);
+    background: var(--alarm-wash);
+    color: var(--text);
+  }
+  .note svg {
+    flex: none;
+    margin-top: 1px;
+  }
+
+  /* ── switch ───────────────────────────────────────────────────────────────────────────── */
+  .switch {
+    position: relative;
+    width: 32px;
+    height: 18px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--rule-strong);
+    background: var(--raised);
+    cursor: pointer;
+    flex: none;
+    transition: background var(--dur-1), border-color var(--dur-1);
+  }
+  .switch[data-state="checked"] {
+    background: var(--run);
+    border-color: var(--run);
+  }
+  .thumb {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text);
+    transform: translateX(2px);
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .switch[data-state="checked"] .thumb {
+    transform: translateX(16px);
+    background: var(--brand-ink);
+  }
+}

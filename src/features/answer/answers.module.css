@@ -1,0 +1,145 @@
+@layer components {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  /* On the red plate: cream outline buttons, the recommended answer in cream. */
+  .row[data-plate="true"] button {
+    border-color: color-mix(in srgb, var(--plate-text) 70%, transparent);
+    color: var(--plate-text);
+  }
+  .row[data-plate="true"] button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--plate-text) 14%, transparent);
+    border-color: var(--plate-text);
+  }
+  .row[data-plate="true"] button[class*="primary"] {
+    background: var(--plate-text);
+    border-color: var(--plate-text);
+    color: var(--plate);
+  }
+  .row[data-plate="true"] button[class*="quiet"] {
+    border-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .row[data-plate="true"] .armed {
+    text-decoration: none;
+    background: var(--brand-ink);
+    border-color: var(--brand-ink);
+    color: var(--plate-text);
+  }
+  .armed {
+    border-color: var(--alarm) !important;
+    color: var(--alarm) !important;
+  }
+  .sending {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 26px;
+    font-size: var(--t-12);
+    font-weight: 600;
+  }
+  .spinner {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    border-right-color: transparent;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  /* dialog forms */
+  .label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: var(--t-12);
+    font-weight: 600;
+    color: var(--text-2);
+  }
+  .input,
+  .textarea {
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--ground);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-2);
+    color: var(--text);
+    font-size: var(--t-13);
+  }
+  .textarea {
+    resize: vertical;
+    line-height: 1.45;
+  }
+  .input:focus,
+  .textarea:focus {
+    outline: 2px solid var(--focus);
+    outline-offset: 0;
+    border-color: transparent;
+  }
+  .count {
+    margin-top: 4px;
+    text-align: right;
+    font-size: var(--t-11);
+    color: var(--text-3);
+  }
+  .hint {
+    margin-bottom: 14px;
+    color: var(--text-2);
+  }
+  .field {
+    display: block;
+    margin-top: 12px;
+    flex: 1;
+  }
+  .pair {
+    display: flex;
+    gap: 10px;
+  }
+  .bumps {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .segs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .seg {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-2);
+    cursor: pointer;
+    font-size: var(--t-12);
+    color: var(--text-2);
+  }
+  .seg input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .seg b {
+    color: var(--text);
+    font-size: var(--t-14);
+  }
+  .seg[data-on="true"] {
+    border-color: var(--run);
+    background: var(--run-wash);
+  }
+  .seg:focus-within {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}

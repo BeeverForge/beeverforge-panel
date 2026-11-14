@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>BeeverForge</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F1F24'/%3E%3Cg transform='translate(2 7) scale(.115)'%3E%3Cg transform='translate(-70 -115)' fill='none' stroke='%23FAF9F6' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M164 243 C149 225 147 194 124 180 C105 168 88 174 79 187 C62 213 89 240 116 246 C133 250 149 248 164 243' stroke='%23D4A24C'/%3E%3Cpath d='M164 243 C158 218 170 183 198 164'/%3E%3Cpath d='M198 164 C215 154 230 143 243 133 C237 120 252 113 262 125 C280 121 290 130 300 137 L308 141 C316 145 309 160 302 163 L292 166 C279 170 273 181 274 193 C274 213 263 233 249 241 C258 235 270 242 273 254'/%3E%3Cpath d='M273 254 L194 254 C180 254 170 250 164 243'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" />
+    <script>
+      // Before the first paint: dark is the default (the product owner's call), and only an
+      // explicit choice is remembered. Applied here so a light-theme operator never sees a flash.
+      try {
+        if (localStorage.getItem("bf_theme") === "light") document.documentElement.dataset.theme = "light";
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

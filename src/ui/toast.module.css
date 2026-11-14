@@ -1,0 +1,78 @@
+@layer components {
+  .region {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 80;
+    pointer-events: none;
+  }
+  .region ol {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  .toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: min(380px, calc(100vw - 40px));
+    padding: 12px 12px 12px 14px;
+    background: var(--raised);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-3);
+    box-shadow: var(--shadow-pop);
+    font-size: var(--t-13);
+    animation: enter var(--dur-2) var(--ease-out);
+  }
+  .toast[data-tone="ok"] > svg {
+    color: var(--ok);
+  }
+  .toast[data-tone="alarm"] {
+    border-color: color-mix(in srgb, var(--alarm) 55%, transparent);
+  }
+  .toast[data-tone="alarm"] > svg {
+    color: var(--alarm);
+  }
+  .toast > svg {
+    margin-top: 1px;
+    flex: none;
+  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .text strong {
+    font-weight: 600;
+  }
+  .text span {
+    color: var(--text-2);
+    line-height: 1.4;
+  }
+  .close {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: var(--r-1);
+    background: none;
+    color: var(--text-3);
+    cursor: pointer;
+  }
+  .close:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+}

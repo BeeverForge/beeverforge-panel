@@ -1,0 +1,4 @@
+# The rig's shell script runs inside WSL or Linux from this checkout; a CRLF line ending breaks it.
+* text=auto eol=lf
+*.png binary
+*.woff2 binary
