@@ -100,6 +100,14 @@ npm run e2e             # end to end against the simulator: the live floor, answ
 npm run build           # the production bundle in dist/
 ```
 
+## Recording a demo
+
+`scripts/demo.mjs` drives a real browser through a captioned tour (the floor, a decision, a merge,
+a line, the board, the product room, costs, ⌘K, the light theme) and saves it to
+`docs/demo/panel-next-demo.webm` (git-ignored). Start the simulator with the outcomes the tour
+needs (the command is at the top of the script), then `node scripts/demo.mjs`. About 100 seconds.
+The cursor and captions are drawn into the recording only.
+
 ## Not done in this proof of concept
 
 - **Not served by the API.** It runs on its own dev server; serving the build from the API (a route

@@ -4,5 +4,6 @@ test-results/
 playwright-report/
 .impeccable/review/
 .impeccable/mocks/
+docs/demo/
 *.tsbuildinfo
 .env.local
