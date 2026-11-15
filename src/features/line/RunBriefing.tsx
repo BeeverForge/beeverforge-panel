@@ -6,11 +6,14 @@ import { q } from "../../api/queries";
 import { duration, money } from "../../live/clock";
 import { Dialog } from "../../ui/Dialog";
 import { Dot, Note, Skeleton } from "../../ui/Button";
+import { EngineLink } from "../../ui/EngineLink";
+import { useEngine } from "../../live/useLiveQueries";
 import { LogFeed } from "../logs/LogFeed";
 import s from "./line.module.css";
 
 export function RunBriefing({ project, issue, onClose }: { project: string; issue: string; onClose: () => void }) {
   const detail = useQuery(q.jobDetail(project, issue));
+  const engine = useEngine();
   const events = useQuery(q.jobEvents(project, issue));
   const d = detail.data;
   return (
@@ -114,11 +117,7 @@ export function RunBriefing({ project, issue, onClose }: { project: string; issu
             <Link to="/logs/$project/$issue" params={{ project, issue }} onClick={onClose}>
               The full log
             </Link>
-            {d.temporal_url && (
-              <a href={d.temporal_url} target="_blank" rel="noreferrer">
-                In the engine
-              </a>
-            )}
+            <EngineLink href={d.temporal_url} hint={engine.data?.ui_hint} what={`run #${issue}`} label="Open in the engine" iconAfter size={12} className={s.briefEngine} offClassName={s.briefEngineOff} />
           </div>
           <section>
             <h3 className={s.h3}>Log</h3>

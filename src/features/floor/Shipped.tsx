@@ -3,6 +3,8 @@
 import { Link } from "@tanstack/react-router";
 import { ago, money, useNow } from "../../live/clock";
 import { Dot, Note, Skeleton } from "../../ui/Button";
+import { EngineLink } from "../../ui/EngineLink";
+import { useEngine } from "../../live/useLiveQueries";
 import { useShipped } from "./model";
 import s from "./shipped.module.css";
 
@@ -22,6 +24,7 @@ const DEPLOY: Record<string, string> = {
 
 export function Shipped({ project, limit = 6 }: { project?: string; limit?: number }) {
   const { runs, total, costs, loading, journalUnread } = useShipped(limit, project);
+  const hint = useEngine().data?.ui_hint;
   const now = useNow();
   return (
     <section className={s.box} aria-labelledby="shipped-title">
@@ -71,6 +74,15 @@ export function Shipped({ project, limit = 6 }: { project?: string; limit?: numb
                   {deploy ?? o.word}
                 </span>
                 <span className={s.cost}>{money(cost)}</span>
+                <EngineLink
+                  href={"temporal_url" in r ? r.temporal_url : undefined}
+                  hint={r.forgotten ? "The engine no longer lists this run — its log is on disk." : hint}
+                  what={`run #${r.issue}`}
+                  iconOnly
+                  size={14}
+                  className={s.engine}
+                  offClassName={s.engineOff}
+                />
               </li>
             );
           })}

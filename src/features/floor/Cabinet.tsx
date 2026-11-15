@@ -10,6 +10,7 @@ import { duration, money, short, useNow } from "../../live/clock";
 import { Skeleton, Note, uiStyles } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
 import { capitalise } from "../../ui/text";
+import { EngineLink } from "../../ui/EngineLink";
 import { Answers, KICKER, kindOf, questionOf } from "../answer/Answers";
 import { usePickup } from "../answer/useAnswer";
 import { WaitedFor } from "../answer/WaitedFor";
@@ -182,14 +183,6 @@ function LineLabel({ line, atLabel, running, pips }: { line: Line; atLabel?: str
       {line.job && atLabel && (
         <span className={s.where}>
           #{line.job.issue} at {atLabel}
-          {line.job.temporal_url && (
-            <>
-              {" · "}
-              <a className={s.engine} href={line.job.temporal_url} target="_blank" rel="noreferrer" title="Open this run in the engine's own UI">
-                engine ↗
-              </a>
-            </>
-          )}
         </span>
       )}
       {pips && (
@@ -200,18 +193,21 @@ function LineLabel({ line, atLabel, running, pips }: { line: Line; atLabel?: str
           ))}
         </ol>
       )}
-      <label className={s.pickup}>
-        <Switch.Root
-          className={uiStyles.switch}
-          checked={enabled}
-          disabled={pickup.isPending}
-          onCheckedChange={(v) => pickup.mutate({ project: line.name, enabled: v })}
-          aria-label={`Pickup for ${line.name}`}
-        >
-          <Switch.Thumb className={uiStyles.thumb} />
-        </Switch.Root>
-        <span>{enabled ? "Pickup on" : "Pickup off"}</span>
-      </label>
+      <div className={s.labelFoot}>
+        <label className={s.pickup}>
+          <Switch.Root
+            className={uiStyles.switch}
+            checked={enabled}
+            disabled={pickup.isPending}
+            onCheckedChange={(v) => pickup.mutate({ project: line.name, enabled: v })}
+            aria-label={`Pickup for ${line.name}`}
+          >
+            <Switch.Thumb className={uiStyles.thumb} />
+          </Switch.Root>
+          <span>{enabled ? "Pickup on" : "Pickup off"}</span>
+        </label>
+        <EngineLink href={line.engineUrl} hint={line.engineHint} what={`${line.name}'s workflows`} size={12} className={s.projEngine} offClassName={s.engineOff} />
+      </div>
     </div>
   );
 }
@@ -306,6 +302,7 @@ function Card({
       </AnimatePresence>
       <div className={s.cardFoot}>
         <span className={s.band} aria-hidden="true" />
+        <EngineLink href={job.temporal_url} hint={line.runHint} what={`run #${job.issue}`} label="engine" iconAfter size={10} className={s.cardEngine} offClassName={s.engineOff} />
         <span title="time at this station">{short(here)}</span>
         <span className={s.cardTotal} title="time since the run started">
           / {short(total)}

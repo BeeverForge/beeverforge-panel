@@ -8,6 +8,8 @@ import { ago, useNow } from "../../live/clock";
 import { Dialog, DialogActions } from "../../ui/Dialog";
 import { Button, Note, Skeleton } from "../../ui/Button";
 import { Markdown } from "../../ui/Markdown";
+import { EngineLink } from "../../ui/EngineLink";
+import { useEngine } from "../../live/useLiveQueries";
 import { useBoardWrites } from "./useBoard";
 import { CardForm } from "./CardForm";
 import { Preview } from "./Preview";
@@ -17,6 +19,9 @@ import f from "../answer/answers.module.css";
 export function CardDrawer({ project, cardRef, preview, onClose }: { project: string; cardRef: string; preview: boolean; onClose: () => void }) {
   const ref = cardRef.replace(/^#/, "");
   const read = useQuery(q.board(project, `#${ref}`));
+  const engine = useEngine();
+  // The engine lists a card's newest run first; that run's workflow is what the card's link opens.
+  const run = (engine.data?.jobs ?? []).find((j) => j.project === project && j.issue === ref);
   const writes = useBoardWrites(project);
   const now = useNow();
   const [reasonFor, setReasonFor] = useState<null | "close" | "remove">(null);
@@ -51,6 +56,7 @@ export function CardDrawer({ project, cardRef, preview, onClose }: { project: st
                 {c.finished ? "Finished by the factory" : "A job holds this card — see it on its line"}
               </Link>
             )}
+            {c.started && <EngineLink href={run?.temporal_url} hint={engine.data?.ui_hint} what={`run #${ref}`} label="Engine" iconAfter size={12} className={s.engineChip} offClassName={s.engineOff} />}
           </div>
 
           {c.body ? <Markdown>{c.body}</Markdown> : <p className={s.sub}>This card has no description.</p>}

@@ -215,6 +215,30 @@
     color: var(--text-3);
     font-size: var(--t-12);
   }
+  .engineChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    padding: 2px 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-pill);
+    font-size: var(--t-12);
+    font-weight: 600;
+    color: var(--link);
+    white-space: nowrap;
+  }
+  .engineChip:hover {
+    text-decoration: none;
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+  }
+  .engineOff {
+    color: var(--text-3);
+    cursor: help;
+  }
+  .engineOff:hover {
+    background: none;
+  }
   .controls {
     display: flex;
     align-items: center;

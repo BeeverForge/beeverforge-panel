@@ -337,6 +337,62 @@
     flex-direction: column;
     margin-bottom: 8px;
   }
+  .runItem {
+    position: relative;
+  }
+  /* The run's own page in the engine, at the row's end — outside the row's button, which opens the briefing. */
+  .runEngine {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: var(--r-2);
+    color: var(--link);
+  }
+  .runEngine:hover {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+  .runEngineOff {
+    color: var(--text-4);
+    cursor: help;
+  }
+  .runEngineOff:hover {
+    background: none;
+  }
+  .liveActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+  }
+  .chipLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 26px;
+    padding: 0 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-pill);
+    font-size: var(--t-12);
+    font-weight: 600;
+    color: var(--link);
+    white-space: nowrap;
+  }
+  .chipLink:hover {
+    text-decoration: none;
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+  }
+  .chipOff {
+    color: var(--text-3);
+    cursor: help;
+  }
+  .chipOff:hover {
+    background: none;
+  }
   .run {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr) 200px 110px 70px;
@@ -344,7 +400,7 @@
     gap: 8px;
     width: 100%;
     min-height: 38px;
-    padding: 0 6px;
+    padding: 0 38px 0 6px;
     border: 0;
     border-top: 1px solid var(--rule);
     background: none;
@@ -540,7 +596,17 @@
   }
   .briefLinks {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
+  }
+  .briefEngine {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .briefEngineOff {
+    color: var(--text-3);
+    cursor: help;
   }
 
   @media (max-width: 1180px) {

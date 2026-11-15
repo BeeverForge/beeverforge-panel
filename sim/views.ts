@@ -17,6 +17,19 @@ const ATTENTION = new Set([
 
 const isWedged = (j: Job) => j.status === "running" && j.steps[j.step]?.park === "wedged";
 
+/** Where the engine's UI is, when somebody said (`SIM_ENGINE_UI=http://localhost:8080`): the same
+ *  paths the server builds (`view.temporal_url`, and the project link in the cockpit). Unset, the
+ *  simulator answers `""` and the sentence, as a deployment nobody told does. */
+const UI = (process.env.SIM_ENGINE_UI ?? "").replace(/\/$/, "");
+const NAMESPACE = "default";
+export const engineUi = {
+  base: UI,
+  hint: "the simulator has no engine UI — set SIM_ENGINE_UI to point links at one, or TEMPORAL_UI_URL on a real deployment",
+  run: (j: Job) => (UI ? `${UI}/namespaces/${NAMESPACE}/workflows/${j.workflow_id}/${j.run_id}/history` : ""),
+  project: (project: string) =>
+    UI ? `${UI}/namespaces/${NAMESPACE}/workflows?query=${encodeURIComponent(`WorkflowId STARTS_WITH "beeverforge-${project}-"`)}` : "",
+};
+
 /** One row of `/api/v1/temporal/jobs` (`view._enriched`). */
 export function engineRow(j: Job) {
   const live = j.status === "running";
@@ -33,7 +46,7 @@ export function engineRow(j: Job) {
     wedged: isWedged(j),
     start_time: j.start_time,
     close_time: j.close_time,
-    temporal_url: "",
+    temporal_url: engineUi.run(j),
     refused: j.refused,
     deploy: j.deploy,
   };
@@ -48,8 +61,8 @@ export function engineFrame(f: Factory) {
   return {
     connected: true,
     address: "the panel-next simulator",
-    ui_base: "",
-    ui_hint: "the simulator has no engine UI — set TEMPORAL_UI_URL on a real deployment",
+    ui_base: engineUi.base,
+    ui_hint: engineUi.base ? "" : engineUi.hint,
     jobs,
     intake: {
       schedule: "on",
@@ -307,7 +320,7 @@ export function jobDetail(f: Factory, project: string, issue: string) {
   if (!j) return { project, issue, workflow_id: `beeverforge-${project}-${issue}`, error: "job not found: the engine holds no run for this card" };
   const out: Record<string, unknown> = {
     project, issue, workflow_id: j.workflow_id,
-    status: j.status, title: j.title, temporal_url: "",
+    status: j.status, title: j.title, temporal_url: engineUi.run(j),
     runtime_ms: j.close_time ? new Date(j.close_time).getTime() - new Date(j.start_time).getTime() : null,
     state: j.state,
     review: j.review ? { score: j.review.score, decision: j.review.decision, summary: j.review.summary, findings: j.review.findings } : null,

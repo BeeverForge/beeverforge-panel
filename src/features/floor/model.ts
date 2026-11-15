@@ -19,6 +19,11 @@ export interface Line {
   need: InboxItem | undefined;
   /** The oldest ask on the floor — the one the server's sentence names — is the reversed plate. */
   first: boolean;
+  /** The engine's UI for this line's workflows (the cockpit's link), and why not when there is none. */
+  engineUrl: string | undefined;
+  engineHint: string | undefined;
+  /** The same for one run: its own link is on the job; the reason is the engine frame's. */
+  runHint: string | undefined;
 }
 
 /** A live run's log for a card on screen: streamed while few runs are live, read on change past
@@ -110,6 +115,9 @@ export function useLines() {
       job,
       need,
       first: Boolean(need && head && need === head),
+      engineUrl: cockpits[i]?.data?.links?.temporal || undefined,
+      engineHint: cockpits[i]?.data?.engine_ui_hint || undefined,
+      runHint: engine.data?.ui_hint || undefined,
     };
   });
 

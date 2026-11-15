@@ -22,7 +22,7 @@
   }
   .row {
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr) 170px 130px 64px;
+    grid-template-columns: 44px minmax(0, 1fr) 170px 130px 64px 26px;
     align-items: center;
     gap: 8px;
     min-height: 36px;
@@ -58,9 +58,28 @@
   .cost {
     text-align: right;
   }
+  /* The run's own page in the engine. */
+  .engine {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: var(--r-2);
+    color: var(--link);
+  }
+  .engine:hover {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+  .engineOff {
+    color: var(--text-4);
+    cursor: help;
+  }
+  .engineOff:hover {
+    background: none;
+  }
   @media (max-width: 700px) {
     .row {
-      grid-template-columns: 40px minmax(0, 1fr) 64px;
+      grid-template-columns: 40px minmax(0, 1fr) 64px 26px;
       padding: 6px 0;
     }
     .when,

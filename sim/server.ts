@@ -10,7 +10,7 @@ import http from "node:http";
 import { URL } from "node:url";
 import { WebSocketServer, type WebSocket } from "ws";
 import { Factory, Refused } from "./factory.ts";
-import { decisions, engineFrame, engineRow, floor, inbox, jobDetail, journalJobs, metrics, pullRequest } from "./views.ts";
+import { decisions, engineFrame, engineRow, engineUi, floor, inbox, jobDetail, journalJobs, metrics, pullRequest } from "./views.ts";
 import { Previews } from "./previews.ts";
 import { ProductRoom } from "./product.ts";
 import type { Outcome } from "./types.ts";
@@ -137,7 +137,8 @@ on("GET", "/api/factory/{project}", async (req, res, m) => {
     single_agent: project !== "tidepool-mobile",
     tokens: { count: 2, ids: ["pool-a", "pool-b"], format: "oauth", source: "the simulator's pool" },
     models: { executor: "claude-sonnet-4-5", planner: "claude-opus-4-1", reviewer: "gpt-5-codex", product: "claude-sonnet-4-5", techlead: "claude-sonnet-4-5" },
-    links: { ...(c.links as Record<string, string>), board: `/p/${encodeURIComponent(project)}/board` },
+    links: { ...(c.links as Record<string, string>), board: `/p/${encodeURIComponent(project)}/board`, temporal: engineUi.project(project) },
+    engine_ui_hint: engineUi.base ? "" : engineUi.hint,
   });
 });
 

@@ -98,19 +98,56 @@
     font-size: var(--t-12);
     color: var(--text-3);
   }
-  .engine {
-    color: var(--link);
-    white-space: nowrap;
+  .labelFoot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin-top: auto;
+    padding-top: 8px;
   }
   .pickup {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: auto;
-    padding-top: 8px;
     font-size: var(--t-11);
     color: var(--text-3);
     cursor: pointer;
+  }
+  /* The engine's own page for this line's workflows. */
+  .projEngine {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--t-11);
+    font-weight: 600;
+    color: var(--link);
+    white-space: nowrap;
+  }
+  /* And for one card's run, on the card: small, on its stock. */
+  .cardEngine {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin: 0 auto 0 4px;
+    font-size: var(--t-11);
+    font-weight: 600;
+    color: var(--card-2);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space: nowrap;
+  }
+  .cardEngine:hover {
+    color: var(--card-ink);
+  }
+  /* Nobody said where the engine's UI is: still there, plainly not followable, with the reason on hover. */
+  .engineOff {
+    color: var(--text-3);
+    text-decoration: none;
+    cursor: help;
+  }
+  .cardEngine.engineOff {
+    color: var(--card-3);
   }
   /* The stations in small: the same marks as the slots, shown where the slots are folded away. */
   .pips {
@@ -291,7 +328,7 @@
     }
   }
   .band {
-    margin-right: auto;
+    flex: none;
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -484,7 +521,7 @@
       gap: 4px 10px;
       padding-bottom: 6px;
     }
-    .pickup {
+    .labelFoot {
       margin: 0 0 0 auto;
       padding: 0;
     }

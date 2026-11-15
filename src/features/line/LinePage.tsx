@@ -96,7 +96,7 @@ export function LinePage() {
           <Link to="/costs" search={{ project }} className={s.headerLink}>
             <Icon name="costs" size={14} /> Costs
           </Link>
-          <EngineLink href={job?.temporal_url || cockpit.data?.links?.temporal} hint={cockpit.data?.engine_ui_hint} className={s.headerLink} offClassName={s.headerOff} />
+          <EngineLink href={cockpit.data?.links?.temporal} hint={cockpit.data?.engine_ui_hint} what={`${project}'s workflows`} className={s.headerLink} offClassName={s.headerOff} />
         </div>
       </header>
 
@@ -115,9 +115,12 @@ export function LinePage() {
                     <span className={s.issue}>#{job.issue}</span>
                     <h2 id="live-title">{job.title || "…"}</h2>
                   </div>
-                  <Button size="sm" tier="quiet" onClick={() => setBrief(job.issue ?? "")}>
-                    Run details
-                  </Button>
+                  <div className={s.liveActions}>
+                    <EngineLink href={job.temporal_url} hint={engine.data?.ui_hint} what={`run #${job.issue}`} label="Engine" iconAfter size={12} className={s.chipLink} offClassName={s.chipOff} />
+                    <Button size="sm" tier="quiet" onClick={() => setBrief(job.issue ?? "")}>
+                      Run details
+                    </Button>
+                  </div>
                 </div>
                 <p className={s.now} aria-live="polite">
                   {kind && kind !== "rate_limit" ? (
@@ -212,8 +215,8 @@ function RecentRuns({ project, onOpen }: { project: string; onOpen: (issue: stri
   const seen = new Set((engine.data?.jobs ?? []).filter((j) => j.project === project).map((j) => j.issue));
   const forgotten = (journal.data ?? []).filter((j) => j.project === project && !seen.has(j.issue));
   const all = [
-    ...fromEngine.map((j) => ({ issue: j.issue ?? "", title: j.title ?? "", state: j.state ?? j.status ?? "", when: j.close_time ?? "", took: j.start_time && j.close_time ? new Date(j.close_time).getTime() - new Date(j.start_time).getTime() : null, deploy: j.deploy, forgotten: false })),
-    ...forgotten.map((j) => ({ issue: j.issue ?? "", title: "", state: j.state ?? "", when: j.updated ?? "", took: null, deploy: null, forgotten: true })),
+    ...fromEngine.map((j) => ({ issue: j.issue ?? "", title: j.title ?? "", state: j.state ?? j.status ?? "", when: j.close_time ?? "", took: j.start_time && j.close_time ? new Date(j.close_time).getTime() - new Date(j.start_time).getTime() : null, deploy: j.deploy, url: j.temporal_url, forgotten: false })),
+    ...forgotten.map((j) => ({ issue: j.issue ?? "", title: "", state: j.state ?? "", when: j.updated ?? "", took: null, deploy: null, url: null, forgotten: true })),
   ].sort((a, b) => b.when.localeCompare(a.when));
   const term = find.trim().toLowerCase();
   const list = term ? all.filter((r) => `#${r.issue} ${r.title} ${r.state} ${r.when.slice(0, 10)}`.toLowerCase().includes(term)) : all;
@@ -231,7 +234,7 @@ function RecentRuns({ project, onOpen }: { project: string; onOpen: (issue: stri
       ) : (
         <ol className={s.runList}>
           {list.slice(0, shown).map((r) => (
-            <li key={`${r.issue}${r.when}`}>
+            <li key={`${r.issue}${r.when}`} className={s.runItem}>
               <button type="button" className={s.run} onClick={() => onOpen(r.issue)}>
                 <span className={s.runNo}>#{r.issue}</span>
                 <span className={s.runTitle}>{r.title || (r.forgotten ? "from the journal on disk" : `card #${r.issue}`)}</span>
@@ -243,6 +246,15 @@ function RecentRuns({ project, onOpen }: { project: string; onOpen: (issue: stri
                 <span className={s.runWhen}>{ago(r.when, now)}</span>
                 <span className={s.runTook}>{r.took ? duration(r.took) : ""}</span>
               </button>
+              <EngineLink
+                href={r.url}
+                hint={r.forgotten ? "The engine no longer lists this run — its log is on disk." : engine.data?.ui_hint}
+                what={`run #${r.issue}`}
+                iconOnly
+                size={14}
+                className={s.runEngine}
+                offClassName={s.runEngineOff}
+              />
             </li>
           ))}
         </ol>
