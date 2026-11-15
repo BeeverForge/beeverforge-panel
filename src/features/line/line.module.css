@@ -71,6 +71,15 @@
     text-decoration: none;
     background: color-mix(in srgb, var(--text) 7%, transparent);
   }
+  /* The engine's link where nobody said where it is: still there, plainly not followable. */
+  .headerOff {
+    color: var(--text-3);
+    cursor: help;
+  }
+  .headerOff:hover {
+    background: none;
+    color: var(--text-3);
+  }
   .grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--needs-col);

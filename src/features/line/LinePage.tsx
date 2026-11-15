@@ -13,6 +13,7 @@ import { ago, duration, money, useNow } from "../../live/clock";
 import { Button, Dot, Note, Skeleton, uiStyles } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
 import { capitalise, Said } from "../../ui/text";
+import { EngineLink } from "../../ui/EngineLink";
 import { Answers, KICKER, kindOf, questionOf } from "../answer/Answers";
 import { WaitedFor } from "../answer/WaitedFor";
 import { waitedFrom } from "../answer/waiting";
@@ -95,6 +96,7 @@ export function LinePage() {
           <Link to="/costs" search={{ project }} className={s.headerLink}>
             <Icon name="costs" size={14} /> Costs
           </Link>
+          <EngineLink href={job?.temporal_url || cockpit.data?.links?.temporal} hint={cockpit.data?.engine_ui_hint} className={s.headerLink} offClassName={s.headerOff} />
         </div>
       </header>
 

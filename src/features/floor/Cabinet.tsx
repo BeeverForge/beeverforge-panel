@@ -182,6 +182,14 @@ function LineLabel({ line, atLabel, running, pips }: { line: Line; atLabel?: str
       {line.job && atLabel && (
         <span className={s.where}>
           #{line.job.issue} at {atLabel}
+          {line.job.temporal_url && (
+            <>
+              {" · "}
+              <a className={s.engine} href={line.job.temporal_url} target="_blank" rel="noreferrer" title="Open this run in the engine's own UI">
+                engine ↗
+              </a>
+            </>
+          )}
         </span>
       )}
       {pips && (
