@@ -1,0 +1,71 @@
+# The panel's checks, on every pull request and on main. Each check after the install runs whatever
+# the ones before it found, so one run names every check that fails, not only the first.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install from the lockfile, with only the reviewed install scripts
+        id: install
+        run: npm run setup
+
+      - name: Every install script in the tree is reviewed
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/install-scripts.mjs check
+
+      - name: Typecheck
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run typecheck
+
+      - name: Lint
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run lint
+
+      - name: Shellcheck the rig
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run lint:sh
+
+      - name: Unit tests
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm test
+
+      # The typecheck above is the build's first half (`tsc -b`); this is the bundle on its own, so a
+      # type error and a broken bundle each fail their own step.
+      - name: Production build
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx vite build
+
+      - name: No high or critical advisory without a reviewed exception
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run audit:policy
+
+      - name: A new runtime dependency states its reason
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: node scripts/new-runtime-dependencies.mjs
