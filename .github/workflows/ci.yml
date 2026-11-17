@@ -15,9 +15,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
-    name: check
-    runs-on: ubuntu-latest
+  platform:
+    name: platform (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +50,7 @@ jobs:
         run: npm run lint
 
       - name: Shellcheck the rig
-        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && runner.os == 'Linux' }}
         run: npm run lint:sh
 
       - name: Unit tests
@@ -69,3 +73,16 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: node scripts/new-runtime-dependencies.mjs
+
+  # Keep the ruleset's required context stable. A failed, skipped or cancelled platform must
+  # never make this required check green.
+  check:
+    name: check
+    if: ${{ always() }}
+    needs: [platform]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require both platforms
+        env:
+          PLATFORM_RESULT: ${{ needs.platform.result }}
+        run: test "$PLATFORM_RESULT" = success
