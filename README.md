@@ -21,11 +21,12 @@ side-by-side with the default panel, measured on the same live floor.
 
 ## Run it
 
-Node 20.19 or later (`engines` in `package.json`), and Python 3.12 or later for the rig. The rig's
-API runs in WSL on Windows, or directly on Linux and macOS (its registry takes a POSIX file lock).
+Node 24 LTS (`.nvmrc`; `engines` refuses another major) and npm 11.17 or later, and Python 3.12
+or later for the rig. The rig's API runs in WSL on Windows, or directly on Linux and macOS (its
+registry takes a POSIX file lock).
 
 ```bash
-npm ci                  # from the committed lockfile
+npm run setup           # npm ci from the lockfile, then only the reviewed install scripts
 npm run rig:install     # once: a venv with the core at contract/core-ref, for the rig
 npm run rig:serve       # terminal 1 — the API on :8788, with a registry of its own
 npm run rig:seed        # once — 4 synthetic projects, 25 cards, 7 requirements
@@ -113,11 +114,32 @@ the engine's next frame for that job lands.
 
 ```bash
 npm run typecheck && npm run lint
+npm run lint:sh         # shellcheck over the rig
 npm test                # unit: the stream merge, the station model
 npm run e2e             # end to end against the simulator: the live floor, answering, the board,
                         # the product room, axe accessibility, phone widths (needs `npm start`)
 npm run build           # the production bundle in dist/
+npm run audit:policy    # npm audit under the dependency policy, below
 ```
+
+CI (`.github/workflows/ci.yml`) runs all of these except `e2e` on every pull request and on `main`,
+and each check reports on its own, so one run names every check that fails.
+
+### The dependency policy
+
+The core's ADR-0059 D3, as this repository holds it:
+
+- **Installs are `npm ci` from the committed lockfile.**
+- **No install script runs on install** (`ignore-scripts` in `.npmrc`). The ones reviewed in
+  `package.json`'s `allowScripts` (esbuild today) run afterwards, by name (`npm run setup`). A
+  package with an install script nobody reviewed fails CI: read it, then `npm approve-scripts <pkg>`
+  or `npm deny-scripts <pkg>`.
+- **A high or critical advisory fails CI.** In the runtime tree there is no exception. In the
+  development tree, an advisory with no patched version may be held by an entry in
+  `audit-exceptions.json`, with its reason and a date to look at it again; an entry past its date,
+  or for an advisory no longer reported, fails CI too.
+- **A new runtime dependency states its reason** in its pull request, under
+  "New runtime dependencies"; CI refuses one the section does not name.
 
 ## Recording a demo
 
