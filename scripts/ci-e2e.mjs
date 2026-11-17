@@ -7,6 +7,8 @@ import { setTimeout as delay } from "node:timers/promises";
 const node = process.execPath;
 const children = [];
 const env = { ...process.env, PANEL_URL: "http://127.0.0.1:4173" };
+const rigUrl = env.PANEL_TARGET ?? "http://127.0.0.1:8788";
+const simulatorUrl = env.SIM_URL ?? "http://127.0.0.1:8790";
 
 function start(label, args) {
   const child = spawn(node, args, { env, stdio: "inherit" });
@@ -27,7 +29,7 @@ async function run(label, args) {
 async function ready(label, url, child) {
   const deadline = Date.now() + 90_000;
   while (Date.now() < deadline) {
-    if (child.exitCode !== null) throw new Error(`${label} exited before it was ready`);
+    if (child.exitCode !== null || child.signalCode !== null) throw new Error(`${label} exited before it was ready`);
     try {
       const response = await fetch(url, { signal: AbortSignal.timeout(2000) });
       if (response.ok) return;
@@ -42,10 +44,10 @@ async function ready(label, url, child) {
 try {
   await run("install the rig", ["scripts/rig.mjs", "install"]);
   const rig = start("rig", ["scripts/rig.mjs", "serve"]);
-  await ready("rig", "http://127.0.0.1:8788/api/v1/projects", rig);
+  await ready("rig", `${rigUrl}/api/v1/projects`, rig);
   await run("seed the rig", ["node_modules/tsx/dist/cli.mjs", "scripts/seed.ts"]);
   const simulator = start("simulator", ["node_modules/tsx/dist/cli.mjs", "sim/server.ts"]);
-  await ready("simulator", "http://127.0.0.1:8790/__sim", simulator);
+  await ready("simulator", `${simulatorUrl}/__sim`, simulator);
   const panel = start("production panel", ["node_modules/vite/bin/vite.js", "preview", "--host", "127.0.0.1", "--strictPort"]);
   await ready("production panel", env.PANEL_URL, panel);
   await run("Playwright", ["node_modules/@playwright/test/cli.js", "test"]);
