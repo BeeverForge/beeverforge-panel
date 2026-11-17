@@ -92,9 +92,10 @@ the engine's next frame for that job lands.
 
 ## Checks
 
-CI runs installation, typecheck, lint, unit tests, the production build, and the dependency policy
-on both Linux and Windows for each pull request. Shellcheck runs on Linux. The required `check`
-passes only if both platforms succeed. The end-to-end suite is not yet run in CI.
+CI runs installation, typecheck, lint, unit tests, the production build, the dependency policy and
+the Playwright suite on both Linux and Windows for each pull request. On Windows, the browser and
+panel run natively and the core API runs in WSL. Shellcheck runs on Linux. The required `check`
+passes only if both platforms and both browser runs succeed.
 
 ```bash
 npm run typecheck && npm run lint
