@@ -60,7 +60,7 @@ export function engineFrame(f: Factory) {
     .map(engineRow);
   return {
     connected: true,
-    address: "the panel-next simulator",
+    address: "the panel's factory simulator",
     ui_base: engineUi.base,
     ui_hint: engineUi.base ? "" : engineUi.hint,
     jobs,

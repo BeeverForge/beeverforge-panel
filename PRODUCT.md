@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-React 19, TypeScript, Vite; TanStack Query and Router; Radix primitives. Chosen for this proof of concept (the user asked for React); built only on BeeverForge's public front-end API (`docs/reference/the-front-end-api.md`).
+React 19, TypeScript, Vite; TanStack Query and Router; Radix primitives. Decided in ADR-0059; built only on BeeverForge's public front-end API (`docs/reference/the-front-end-api.md`).
 
 ## Users
 
@@ -22,7 +22,7 @@ React 19, TypeScript, Vite; TanStack Query and Router; Radix primitives. Chosen 
 
 BeeverForge is an autonomous software factory: a ticket dropped on a board is picked up, implemented by a coding agent in a throwaway box, validated by the project's own gates, independently reviewed, opened as a pull request and merged, and its deploy is watched. Policies approve actions; a person judges the result. The panel is the reference surface where that happens in view (ADR-0038).
 
-This proof of concept rebuilds the panel in React to compare against the current single-file panel. It succeeds when, side by side on the same live floor, it is clearly better at four things the user named:
+The panel is rebuilt in React, in a repository of its own, to replace the single-file page the core still serves (`beeverforge/api/panel.html`; the core's ADR-0059). It succeeds when, side by side on the same live floor, it is clearly better at four things the user named:
 
 1. **Feels alive in real time:** stations advance, logs stream and counts change the moment the server says so.
 2. **Answer what needs me fastest:** merge, decide, resume or skip in one place, with the least clicking and reading.
@@ -48,7 +48,7 @@ The control model is inverted: interactive AI coding asks a person to approve ev
 - Unread is never empty: a read that failed (`null`) and a read that found nothing (`[]`) are always different states with different sentences.
 - Every action names what it does; refusals are shown in the server's own sentence.
 - Dark theme by default, plus a light theme; `prefers-color-scheme` is deliberately not the default (the product owner chose the dark control room).
-- This POC must not modify the existing panel or backend.
+- The panel asks nothing of the core beyond its public contract. A word or a read it needs that the core does not publish yet is added in the core, as a contract any front end may read, and never copied here.
 
 ## Brand Commitments
 
@@ -60,8 +60,8 @@ The control model is inverted: interactive AI coding asks a person to approve ev
 
 ## Evidence on Hand
 
-- Synthetic projects and cards for the POC (`sim/fixtures.ts`), labelled synthetic; no customer data.
-- No testimonials, metrics, or customer names exist for this POC; none may be invented.
+- Synthetic projects and cards for the rig and the simulator (`sim/fixtures.ts`), labelled synthetic; no customer data.
+- No testimonials, metrics, or customer names exist for this panel; none may be invented.
 
 ## Product Principles
 

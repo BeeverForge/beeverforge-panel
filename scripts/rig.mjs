@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const script = resolve(here, "rig.bash");
 const command = process.argv[2] ?? "serve";
-const distro = process.env.PANEL_NEXT_WSL_DISTRO;
+const distro = process.env.PANEL_WSL_DISTRO;
 
 function wslPath(windowsPath) {
   const args = [...(distro ? ["-d", distro] : []), "wslpath", "-a", windowsPath.replaceAll("\\", "/")];

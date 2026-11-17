@@ -1,8 +1,8 @@
 {
-  "name": "beeverforge-panel-next",
+  "name": "beeverforge-panel",
   "private": true,
   "version": "0.0.0",
-  "description": "A React proof of concept of the BeeverForge panel, built only on the public front-end API.",
+  "description": "The BeeverForge panel, rebuilt in React on the public front-end API only. Development-only until the API serves it.",
   "type": "module",
   "engines": {
     "node": ">=20.19"
@@ -16,7 +16,8 @@
     "rig:serve": "node scripts/rig.mjs serve",
     "rig:seed": "tsx scripts/seed.ts",
     "rig:reset": "node scripts/rig.mjs reset",
-    "gen:types": "openapi-typescript ../docs/reference/openapi.json -o src/api/generated/openapi.ts && tsx scripts/gen-events.ts",
+    "contract:pull": "node scripts/pull-contract.mjs",
+    "gen:types": "openapi-typescript contract/openapi.json -o src/api/generated/openapi.ts && tsx scripts/gen-events.ts",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b",

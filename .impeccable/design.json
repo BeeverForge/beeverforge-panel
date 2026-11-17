@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-11-14T17:43:05Z",
-  "title": "Design System: BeeverForge Panel (panel-next)",
+  "title": "Design System: BeeverForge Panel",
   "extensions": {
     "colorMeta": {
       "brand-ink": { "role": "neutral", "displayName": "Brand Ink", "canonical": "#1f1f24", "lightTheme": "#1f1f24", "tonalRamp": ["#0b0b0c", "#242427", "#3f3f45", "#5d5d63", "#7c7c83", "#9e9ea4", "#c7c7cb", "#eeeef0"] },

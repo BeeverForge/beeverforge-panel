@@ -1,9 +1,18 @@
-# panel-next — a React proof of concept of the BeeverForge panel
+# BeeverForge Panel
 
-A second front end for BeeverForge, built in React to compare against the default panel
-(`beeverforge/api/panel.html`), which it does not touch. It uses the public front-end API only
-([`docs/reference/the-front-end-api.md`](../docs/reference/the-front-end-api.md)): the versioned
-`/api/v1/` reads, the catalogued actions, the two server-sent-event streams and the two sockets.
+The BeeverForge panel, rebuilt in React. It is a client of the core
+([BeeverForge/beeverforge-oss](https://github.com/BeeverForge/beeverforge-oss)) and uses its public
+front-end API only
+([`the-front-end-api.md`](https://github.com/BeeverForge/beeverforge-oss/blob/main/docs/reference/the-front-end-api.md)):
+the versioned `/api/v1/` reads, the catalogued actions, the two server-sent-event streams and the
+two sockets. The core is headless; this panel replaces the page it still serves today
+(`beeverforge/api/panel.html`), as the core's ADR-0059 records
+([BeeverForge/beeverforge-oss#590](https://github.com/BeeverForge/beeverforge-oss/pull/590)).
+
+**Not shipped yet.** A deployment still serves the core's `panel.html`. The panel will reach a
+deployment as an image of its own that the core's compose file starts, serving the built files and
+passing `/api` to the core on the same origin. The work is tracked in the milestone
+[The new panel](https://github.com/BeeverForge/beeverforge-panel/milestones).
 
 What it is for: the operator who keeps the floor open all day. Every production line is on one
 screen, each live card sits at the station it has reached and moves when the server says it moved,
@@ -12,13 +21,12 @@ side-by-side with the default panel, measured on the same live floor.
 
 ## Run it
 
-Node 20.19 or later. The API runs from this checkout in WSL on Windows, or directly on Linux and
-macOS (its registry takes a POSIX file lock).
+Node 20.19 or later (`engines` in `package.json`), and Python 3.12 or later for the rig. The rig's
+API runs in WSL on Windows, or directly on Linux and macOS (its registry takes a POSIX file lock).
 
 ```bash
-cd panel-next
-npm install
-npm run rig:install     # once: a venv with this checkout's beeverforge, for the rig
+npm ci                  # from the committed lockfile
+npm run rig:install     # once: a venv with the core at contract/core-ref, for the rig
 npm run rig:serve       # terminal 1 — the API on :8788, with a registry of its own
 npm run rig:seed        # once — 4 synthetic projects, 25 cards, 7 requirements
 npm start               # terminal 2 — the factory simulator on :8790 and the panel on :5173
@@ -27,21 +35,31 @@ npm start               # terminal 2 — the factory simulator on :8790 and the 
 Open <http://127.0.0.1:5173/>. The default panel reads the same live floor at
 <http://127.0.0.1:8790/>, so the two can be compared side by side.
 
+To try the panel against a change to the core before it is merged, point the rig at a checkout:
+`BEEVERFORGE_CORE=../beeverforge-oss npm run rig:install`.
+
 Against a real deployment instead (for example `docker compose up` on :8787):
 
 ```bash
 npm run dev:live        # the panel on :5173, every /api call to :8787 (.env.live)
 ```
 
+## The contract
+
+`contract/` holds the core's `openapi.json` and `events.schema.json` at one commit of the core,
+named in `contract/core-ref`; the types in `src/api/generated/` are generated from them, and the rig
+installs the core at the same commit. [contract/README.md](contract/README.md) says how to move to
+a newer core.
+
 ## The test bed
 
 | piece | what it is | where |
 |---|---|---|
-| the rig | this checkout's own API, served with a registry, board, journal, metrics store and `HOME` of its own under `~/.panel-next-rig`. No worker and no engine run, and the engine address is a closed port, so nothing registered there is ever picked up by a real agent or spends a harness token | `scripts/rig.bash` |
+| the rig | the core's own API, served with a registry, board, journal, metrics store and `HOME` of its own under `~/.panel-rig`. No worker and no engine run, and the engine address is a closed port, so nothing registered there is ever picked up by a real agent or spends a harness token | `scripts/rig.bash` |
 | the seed | writes the synthetic projects and cards through the public API, and commits the synthetic requirements into each product's context repository | `scripts/seed.ts`, `sim/fixtures.ts`, `sim/requirements/` |
 | the factory simulator | a reverse proxy in front of the rig that answers, itself, every route only an engine and a worker could answer — the jobs and their streams, their logs, the floor's verdict, what needs a person, the tech lead, spend, previews and the product role's replies — and passes everything else through. It picks cards up from the real TO-DO column and walks each one through the real stations with scripted outcomes | `sim/` |
 
-Everything in the seed is invented for the POC: no customer, no real code.
+Everything in the seed is invented: no customer, no real code.
 
 The simulator's controls, for a demo or a test:
 
@@ -80,7 +98,8 @@ the engine's next frame for that job lands.
 
 | path | what |
 |---|---|
-| `src/api/` | the typed client: `generated/` from `docs/reference/openapi.json` and `events.schema.json` (`npm run gen:types`), `types.ts` for the fields the server writes into untyped dicts, `queries.ts`, `actions.ts`, `http.ts` |
+| `contract/` | the core's API contract at `core-ref` |
+| `src/api/` | the typed client: `generated/` from `contract/` (`npm run gen:types`), `types.ts` for the fields the server writes into untyped dicts, `queries.ts`, `actions.ts`, `http.ts` |
 | `src/live/` | the streams, the station model (`pipeline.ts`), one clock for every timer |
 | `src/features/floor/` | the cabinet (lines × stations), Needs you, recently finished |
 | `src/features/line/` | one line in depth: the live station strip, its log, the tech lead, how it runs, its runs |
@@ -88,7 +107,7 @@ the engine's next frame for that job lands.
 | `src/features/logs/`, `costs/`, `product/` | every run's log; spend, autonomy and the knowledge-map A/B; the product owner's room |
 | `src/features/answer/` | every answer a person gives the floor, drawn the same wherever it is asked |
 | `src/styles/tokens.css` | the design tokens, both themes |
-| `PRODUCT.md`, `.impeccable/` | the product record and the design direction this was built to |
+| `PRODUCT.md`, `DESIGN.md`, `.impeccable/` | the product record and the design direction this was built to |
 
 ## Checks
 
@@ -104,17 +123,21 @@ npm run build           # the production bundle in dist/
 
 `scripts/demo.mjs` drives a real browser through a captioned tour (the floor, a decision, a merge,
 a line, the board, the product room, costs, ⌘K, the light theme) and saves it to
-`docs/demo/panel-next-demo.webm` (git-ignored). Start the simulator with the outcomes the tour
-needs (the command is at the top of the script), then `node scripts/demo.mjs`. About 100 seconds.
-The cursor and captions are drawn into the recording only.
+`docs/demo/panel-demo.webm` (git-ignored). Start the simulator with the outcomes the tour needs
+(the command is at the top of the script), then `node scripts/demo.mjs`. About 100 seconds. The
+cursor and captions are drawn into the recording only.
 
-## Not done in this proof of concept
+## Known gaps
 
-- **Not served by the API.** It runs on its own dev server; serving the build from the API (a route
-  outside `/api`, the package data, the guard tests that walk routes) is the step after a decision.
+- **Not shipped.** It runs on its own dev server; no image serves the build yet.
 - **The product role's replies are the simulator's**, a few fixed patterns; a real deployment's
   come from its worker. Requirements, documents, the system map and the agenda are the rig's own.
 - **The brand name** comes from `VITE_BRAND` rather than the server's `BEEVERFORGE_PLATFORM_NAME`,
   which the server writes only into its own page.
 - **A board read by a product-only credential** opens the product room rather than a read-only
   board.
+- **The product room cannot switch product**: it opens on the first one.
+
+## Licence
+
+Apache-2.0, like the core: see [LICENSE](LICENSE) and [NOTICE](NOTICE).

@@ -1,15 +1,15 @@
-# The default panel and panel-next, side by side
+# The default panel and the new panel, side by side
 
 Both panels were measured on the **same live floor at the same time**: the rig's API, with the
 factory simulator answering for the engine and the worker (see [README.md](README.md)). The default
-panel was opened at `http://127.0.0.1:8790/`, served by the API exactly as it ships; panel-next at
+panel was opened at `http://127.0.0.1:8790/`, served by the API exactly as it ships; the new panel at
 `http://127.0.0.1:5173/`. `node scripts/compare.mjs` repeats every measurement below; the figures
 here are one run of it, each page watched for 60 s after it settled. The axe counts move a little
 with what is on the floor at that moment, because they count elements.
 
 ## What it looks like
 
-| | the default panel | panel-next |
+| | the default panel | the new panel |
 |---|---|---|
 | the floor | ![](docs/screens/old-floor.png) | ![](docs/screens/new-floor.png) |
 | one line | ![](docs/screens/old-line.png) | ![](docs/screens/new-line.png) |
@@ -17,7 +17,7 @@ with what is on the floor at that moment, because they count elements.
 
 ## What was measured
 
-| | the default panel | panel-next |
+| | the default panel | the new panel |
 |---|---|---|
 | API requests in a minute of steady state, on the floor | **51** — `/api/floor` 33, coordinator 10, inbox 4, jobs 3, budget 1 | **2** — the tech lead's narration, a 30 s backstop |
 | … on a line's page | **23** — coordinator 10, inbox 4, jobs 3, the line's floor 3, and 3 more | **2** |
@@ -31,7 +31,7 @@ with what is on the floor at that moment, because they count elements.
 
 ## What a person sees differently
 
-| question | the default panel | panel-next |
+| question | the default panel | the new panel |
 |---|---|---|
 | Is the factory moving? | one sentence, then a list of what needs you; the lines are below the fold as project tiles | the same sentence, then **every line at once**: each live card sits in the pigeonhole of the station it is at, the time each station took, and the card travels to the next slot as the engine says it moved |
 | What needs me, and where do I answer? | a list on the index; buttons on the project page; a modal opens by itself for a new decision | the oldest ask is the screen's one red plate, on the card itself, with its answers; every other ask is flagged on its card and listed in Needs you with the same answers — nothing opens by itself |
@@ -45,7 +45,7 @@ with what is on the floor at that moment, because they count elements.
 Everything the default panel does is here, built on the same routes, except where the last column
 says otherwise.
 
-| area | in panel-next |
+| area | in the new panel |
 |---|---|
 | the floor's verdict, its census, the "also" causes, the build-split banner, the live/reconnecting state | yes |
 | what needs you: decisions, merge gates (merge, re-review, adjust, address comments, discard), production approval, usage-limit pauses, held cards (resume, skip), wedged jobs (stop) | yes, with the server's options |
