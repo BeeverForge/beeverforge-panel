@@ -37,8 +37,10 @@
     --ok: #3ddc84;
     --ok-ink: #1f1f24;
     --ok-wash: rgb(61 220 132 / 0.1);
-    --alarm: #f0625a;
-    --alarm-wash: rgb(240 98 90 / 0.12);
+    /* Coral is read as text on its own wash, over the raised surface at worst: #f47870 holds 4.61:1
+       there, where #f0625a held 4.06:1 (4.42:1 over the cabinet, a review's warn line on a line's page). */
+    --alarm: #f47870;
+    --alarm-wash: rgb(244 120 112 / 0.12);
     --plate: #c2372d;
     --plate-text: #faf9f6;
     --plate-2: #fdeeeb;
@@ -108,9 +110,11 @@
 
     --run: #8a5c16;
     --run-wash: rgb(138 92 22 / 0.1);
-    --ok: #157a46;
+    /* Green state words sit on the cabinet (a live log's "streaming"): #126b3d holds 5.26:1 there
+       and 4.60:1 on its own wash, where #157a46 held 4.31:1. */
+    --ok: #126b3d;
     --ok-ink: #ffffff;
-    --ok-wash: rgb(21 122 70 / 0.1);
+    --ok-wash: rgb(18 107 61 / 0.1);
     --alarm: #b3261e;
     --alarm-wash: rgb(179 38 30 / 0.08);
     --plate: #b42d24;

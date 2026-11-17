@@ -24,8 +24,8 @@ colors:
   ok: "#3ddc84"
   ok-ink: "#1f1f24"
   ok-wash: "rgb(61 220 132 / 0.1)"
-  alarm: "#f0625a"
-  alarm-wash: "rgb(240 98 90 / 0.12)"
+  alarm: "#f47870"
+  alarm-wash: "rgb(244 120 112 / 0.12)"
   plate: "#c2372d"
   plate-text: "#faf9f6"
   plate-2: "#fdeeeb"
@@ -272,7 +272,7 @@ A near-neutral ink and cream kit with four state colours that each mean one thin
 ### Secondary
 - **Reversed-Plate Red** (#c2372d): the one red plate for the oldest ask, the 3px band and bold kind word on every other ask strip, the held card's band and dot, the held pip, the line page's held station. Also every red mark printed on cream stock (a failed gate, a review warning on a strip), because it holds AA on cream.
 - **Plate Blush** (#fdeeeb): secondary text on the plate (held-at, waited-for, the review verdict).
-- **Signal Coral** (#f0625a): red on ink. The floor sentence's "Needs you" word, warn and error state words, stale freshness, failed-run notes, the armed confirm button off the plate, error toasts and diff deletions. Never on cream.
+- **Signal Coral** (#f47870): red on ink. The floor sentence's "Needs you" word, warn and error state words, stale freshness, failed-run notes, the armed confirm button off the plate, error toasts and diff deletions. Never on cream. It is read as text on its own Alarm wash too, so it holds 4.5:1 there over the raised surface (4.61:1); #f0625a, the first coral, fell to 4.42:1 over the cabinet.
 
 ### Tertiary
 - **Tick Green** (#3ddc84): passed. The 18px station tick (with Black Print check), passed pips, the "deployed" and "live" dots, diff additions, the Done column band.

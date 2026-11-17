@@ -343,7 +343,7 @@ on("GET", "/__sim", (_q, res) =>
     speed: factory.speed,
     backend: BACKEND,
     live: factory.jobs.filter((j) => j.status === "running").map(engineRow),
-    outcomes: ["merge_human", "merge_auto", "decision", "repair_then_merge", "rate_limit", "fail_hold", "prod_approval", "wedged"],
+    outcomes: ["merge_human", "merge_rejected", "merge_auto", "decision", "repair_then_merge", "rate_limit", "fail_hold", "prod_approval", "wedged"],
   }),
 );
 on("POST", "/__sim/speed", (_q, res, _m, url) => {
@@ -354,6 +354,10 @@ on("POST", "/__sim/force", (_q, res, _m, url) => {
   const project = url.searchParams.get("project") ?? "";
   factory.force(project, (url.searchParams.get("outcome") ?? "merge_human") as Outcome);
   send(res, 200, { project, next: url.searchParams.get("outcome") });
+});
+on("POST", "/__sim/stage", async (_q, res, _m, url) => {
+  const project = url.searchParams.get("project") ?? "";
+  send(res, 200, { project, started: await factory.startNow(project, (url.searchParams.get("outcome") ?? "merge_human") as Outcome) });
 });
 on("POST", "/__sim/pickup", async (_q, res) => {
   await factory.refresh();

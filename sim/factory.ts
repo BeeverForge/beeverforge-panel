@@ -252,22 +252,25 @@ export class Factory extends EventEmitter {
     return undefined;
   }
 
-  async start(project: string, card: BoardCard): Promise<Job> {
+  async start(project: string, card: BoardCard, checkSpec = true): Promise<Job> {
     const attempt = this.jobs.filter((j) => j.project === project && j.issue === card.ref && !j.history).length + 1;
     const outcome = this.forced.get(project) ?? pickOutcome(`${project}#${card.ref}#${attempt}`, project);
     this.forced.delete(project);
     const job = this.newJob(project, card, outcome, attempt);
     // A card with no acceptance criteria goes back for refinement, as the spec check would send it.
-    try {
-      const detail = await this.read<{ card?: { body?: string | null } | null }>(
-        `/api/v1/board/${encodeURIComponent(project)}?card=${encodeURIComponent(`#${card.ref}`)}`,
-      );
-      const body = detail.card?.body ?? "";
-      if (!/acceptance criteria/i.test(body) || !/^\s*[-*] /m.test(body)) {
-        job.steps = stepsFor({ project, issue: card.ref, title: card.title, outcome, twoStage: project === "tidepool-mobile", seed: `${project}#${card.ref}#${attempt}`, weakSpec: true });
+    // A run started by `startNow` below skips the check, so its script runs as written.
+    if (checkSpec) {
+      try {
+        const detail = await this.read<{ card?: { body?: string | null } | null }>(
+          `/api/v1/board/${encodeURIComponent(project)}?card=${encodeURIComponent(`#${card.ref}`)}`,
+        );
+        const body = detail.card?.body ?? "";
+        if (!/acceptance criteria/i.test(body) || !/^\s*[-*] /m.test(body)) {
+          job.steps = stepsFor({ project, issue: card.ref, title: card.title, outcome, twoStage: project === "tidepool-mobile", seed: `${project}#${card.ref}#${attempt}`, weakSpec: true });
+        }
+      } catch {
+        /* the card could not be read; the run goes on as scripted */
       }
-    } catch {
-      /* the card could not be read; the run goes on as scripted */
     }
     this.jobs.push(job);
     this.enter(job, 0);
@@ -566,6 +569,21 @@ export class Factory extends EventEmitter {
 
   force(project: string, outcome: Outcome) {
     this.forced.set(project, outcome);
+  }
+
+  /** For a test that needs one state now, not after whatever the line is doing ends: ends the
+   *  project's live job and starts its first TO-DO card (or its first card) on `outcome`, skipping
+   *  the spec check so the script runs as written. */
+  async startNow(project: string, outcome: Outcome): Promise<string> {
+    await this.refresh();
+    const live = this.live(project);
+    if (live) this.close(live, "skipped", "ended by the simulator's stage control");
+    const cards = this.boards.get(project) ?? [];
+    const card = cards.find((c) => c.column === "TO-DO") ?? cards[0];
+    if (!card) throw new Refused(409, `${project} has no card the simulator can stage`);
+    this.force(project, outcome);
+    const job = await this.start(project, card, false);
+    return `#${job.issue}`;
   }
 
   // ── the tech-lead ─────────────────────────────────────────────────────────────────────────
