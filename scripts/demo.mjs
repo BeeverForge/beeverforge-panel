@@ -192,7 +192,7 @@ try {
   await hold(3200);
   await tap(page.getByRole("button", { name: "Switch to the dark theme" }));
   await hold(1200);
-  await caption("panel-next — a React proof of concept, built only on the public API. Beside the default panel, on the same floor.");
+  await caption("The new panel, built only on the public API. Beside the default panel, on the same floor.");
   await hold(4800);
   await caption(null);
   await hold(600);
@@ -200,7 +200,7 @@ try {
   const video = page.video();
   await context.close();
   const file = await video.path();
-  const target = join(out, "panel-next-demo.webm");
+  const target = join(out, "panel-demo.webm");
   renameSync(file, target);
   rmSync(tmp, { recursive: true, force: true });
   await browser.close();

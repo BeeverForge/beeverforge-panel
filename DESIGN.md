@@ -1,5 +1,5 @@
 ---
-name: BeeverForge Panel (panel-next)
+name: BeeverForge Panel
 description: The operator's floor as a kanban post, where every live card sits in its station's pigeonhole and the one thing that needs a person turns red.
 colors:
   brand-ink: "#1f1f24"
@@ -243,7 +243,7 @@ components:
     width: "380px"
 ---
 
-# Design System: BeeverForge Panel (panel-next)
+# Design System: BeeverForge Panel
 
 ## Overview
 

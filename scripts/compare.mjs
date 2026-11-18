@@ -5,15 +5,14 @@
 //   node scripts/compare.mjs
 import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
-import { readFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
-import { fileURLToPath } from "node:url";
 
 const OLD = process.env.OLD_URL ?? "http://127.0.0.1:8790";
 const NEW = process.env.PANEL_URL ?? "http://127.0.0.1:5173";
 const WINDOW_MS = Number(process.env.WINDOW_MS ?? 60_000);
 
-const html = readFileSync(fileURLToPath(new URL("../../beeverforge/api/panel.html", import.meta.url)));
+// The default panel's page as the rig's API serves it, so the size is the one a browser downloads.
+const html = Buffer.from(await (await fetch(`${OLD}/`)).arrayBuffer());
 console.log(`default panel page: ${(html.length / 1024).toFixed(0)} KB, ${(gzipSync(html).length / 1024).toFixed(0)} KB gzip`);
 
 const browser = await chromium.launch();

@@ -1,10 +1,3 @@
 {
-  "exceptions": [
-    {
-      "advisory": "GHSA-fc5q-39xc-vjpf",
-      "package": "picomatch",
-      "reason": "ReDoS from a crafted glob pattern, with no patched version (<= 4.0.7, the latest). picomatch is only in the development tree (vite, vitest, typescript-eslint, json-schema-to-typescript), whose glob patterns are this repository's own configuration, never input from a user; nothing of it reaches the built panel.",
-      "review_by": "2027-01-15"
-    }
-  ]
+  "exceptions": []
 }

@@ -1,4 +1,4 @@
-// The synthetic world the POC runs on. Invented for the POC: no customer, no real code.
+// The synthetic world the rig and the simulator run on. Invented: no customer, no real code.
 //
 // `scripts/seed.ts` writes these projects and cards to the rig through the public API. A person may
 // only put a card in Backlog or TO-DO there (the other columns are the factory's), so a card marked

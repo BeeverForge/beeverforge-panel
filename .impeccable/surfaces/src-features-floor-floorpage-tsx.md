@@ -7,7 +7,7 @@ related_targets: ["src/app/Shell.tsx"]
 
 ## Scope
 
-The operator's floor in the React proof of concept (panel-next): the shell, the floor overview, a project's line, and every surface reached from them (board, logs, costs, product room). Visitor mode: Operate.
+The operator's floor in the React panel: the shell, the floor overview, a project's line, and every surface reached from them (board, logs, costs, product room). Visitor mode: Operate.
 
 ## Audience, job, constraints
 
