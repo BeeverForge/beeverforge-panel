@@ -5,9 +5,11 @@
   "description": "The BeeverForge panel, rebuilt in React on the public front-end API only. Development-only until the API serves it.",
   "type": "module",
   "engines": {
-    "node": ">=20.19"
+    "node": ">=24 <25"
   },
   "scripts": {
+    "setup": "npm ci && node scripts/install-scripts.mjs check && node scripts/install-scripts.mjs run",
+    "audit:policy": "node scripts/audit.mjs",
     "dev": "vite",
     "dev:live": "vite --mode live",
     "sim": "tsx sim/server.ts",
@@ -75,5 +77,8 @@
     "vite": "^8.3.8",
     "vitest": "^5.1.0",
     "ws": "^8.23.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }
