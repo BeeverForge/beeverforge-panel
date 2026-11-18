@@ -12,12 +12,12 @@ side-by-side with the default panel, measured on the same live floor.
 
 ## Run it
 
-Node 20.19 or later. The API runs from this checkout in WSL on Windows, or directly on Linux and
+Node 24 LTS and npm 11.17 or later. The API runs from this checkout in WSL on Windows, or directly on Linux and
 macOS (its registry takes a POSIX file lock).
 
 ```bash
 cd panel-next
-npm install
+npm run setup           # npm ci, then only the reviewed install scripts
 npm run rig:install     # once: a venv with this checkout's beeverforge, for the rig
 npm run rig:serve       # terminal 1 — the API on :8788, with a registry of its own
 npm run rig:seed        # once — 4 synthetic projects, 25 cards, 7 requirements
@@ -91,6 +91,11 @@ the engine's next frame for that job lands.
 | `PRODUCT.md`, `.impeccable/` | the product record and the design direction this was built to |
 
 ## Checks
+
+CI runs installation, typecheck, lint, unit tests, the production build, the dependency policy and
+the Playwright suite on both Linux and Windows for each pull request. On Windows, the browser and
+panel run natively and the core API runs in WSL. Shellcheck runs on Linux. The required `check`
+passes only if both platforms and both browser runs succeed.
 
 ```bash
 npm run typecheck && npm run lint

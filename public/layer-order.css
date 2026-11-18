@@ -1,0 +1,2 @@
+/* This is loaded before Vite's split stylesheets so components cannot precede base. */
+@layer reset, tokens, base, components, utilities;
