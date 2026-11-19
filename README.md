@@ -66,13 +66,19 @@ The simulator's controls, for a demo or a test:
 ```bash
 SIM_SPEED=3 npm run sim                                    # three times faster
 SIM_FORCE="tidepool-mobile=decision,quarry-api=prod_approval" npm run sim
-curl -X POST "127.0.0.1:8790/__sim/force?project=atlas-docs&outcome=fail_hold"
+curl -X POST "127.0.0.1:8790/__sim/force?project=atlas-docs&outcome=fail_hold"   # its next card
+curl -X POST "127.0.0.1:8790/__sim/stage?project=atlas-docs&outcome=merge_rejected"  # now
 curl 127.0.0.1:8790/__sim                                  # what is live right now
 ```
 
-Outcomes: `merge_human`, `merge_auto`, `decision`, `repair_then_merge`, `rate_limit`, `fail_hold`,
-`prod_approval`, `wedged`. The simulator keeps its runs in memory: restarting it puts the cards it
-was working on back to where the board holds them.
+`force` sets the outcome of the project's next card, so it waits for whatever the line is doing.
+`stage` ends what the line is doing and starts a card on the outcome at once, skipping the spec
+check; a test that needs one state uses it.
+
+Outcomes: `merge_human`, `merge_rejected` (the merge gate after the review rejected it),
+`merge_auto`, `decision`, `repair_then_merge`, `rate_limit`, `fail_hold`, `prod_approval`, `wedged`.
+The simulator keeps its runs in memory: restarting it puts the cards it was working on back to
+where the board holds them.
 
 `npm run rig:reset` stops the rig and deletes everything it wrote.
 

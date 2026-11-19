@@ -64,6 +64,7 @@ export interface Review {
 
 export type Outcome =
   | "merge_human"
+  | "merge_rejected"
   | "merge_auto"
   | "decision"
   | "repair_then_merge"

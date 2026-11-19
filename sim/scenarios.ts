@@ -261,7 +261,8 @@ export function stepsFor(ctx: Ctx): Step[] {
 
   steps.push({ state: "validating", seconds: 14, events: gateEvents() });
 
-  const rejected = ctx.outcome === "merge_human" && rnd() < 0.35;
+  // merge_rejected is merge_human with the review's rejection decided, for a test that needs it.
+  const rejected = ctx.outcome === "merge_rejected" || (ctx.outcome === "merge_human" && rnd() < 0.35);
   steps.push({
     state: "reviewing",
     seconds: 12,
