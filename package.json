@@ -21,6 +21,7 @@
     "contract:pull": "node scripts/pull-contract.mjs",
     "gen:types": "openapi-typescript contract/openapi.json -o src/api/generated/openapi.ts && tsx scripts/gen-events.ts",
     "build": "tsc -b && vite build",
+    "budget": "node scripts/bundle-budget.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "eslint .",
