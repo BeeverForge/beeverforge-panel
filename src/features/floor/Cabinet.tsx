@@ -276,7 +276,7 @@ function Card({
           className={s.cardDetail}
           initial={reduce ? false : { opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
+          exit={reduce ? undefined : { opacity: 0 }}
           transition={{ duration: 0.22 }}
         >
           {held ? null : paused ? (

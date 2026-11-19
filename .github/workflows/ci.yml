@@ -1,0 +1,142 @@
+# The panel's checks, on every pull request and on main. Each check after the install runs whatever
+# the ones before it found, so one run names every check that fails, not only the first.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  platform:
+    name: platform (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install from the lockfile, with only the reviewed install scripts
+        id: install
+        run: npm run setup
+
+      - name: Every install script in the tree is reviewed
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/install-scripts.mjs check
+
+      - name: Typecheck
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run typecheck
+
+      - name: Lint
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run lint
+
+      - name: Shellcheck the rig
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && runner.os == 'Linux' }}
+        run: npm run lint:sh
+
+      - name: Unit tests
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm test
+
+      # The typecheck above is the build's first half (`tsc -b`); this is the bundle on its own, so a
+      # type error and a broken bundle each fail their own step.
+      - name: Production build
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx vite build
+
+      - name: No high or critical advisory without a reviewed exception
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run audit:policy
+
+      - name: A new runtime dependency states its reason
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: node scripts/new-runtime-dependencies.mjs
+
+  e2e:
+    name: e2e (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      # The current rig resolves the core from its parent directory. Check out the real core at
+      # the same revision as the panel's initial contract, then the PR's merge commit inside it.
+      - uses: actions/checkout@v4
+        with:
+          repository: BeeverForge/beeverforge-oss
+          ref: 8d9ae51c26284113dc2d5efedca1ce0b143f775c
+          path: ci-core
+      - uses: actions/checkout@v4
+        with:
+          path: ci-core/panel-next
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ci-core/panel-next/.nvmrc
+          cache: npm
+          cache-dependency-path: ci-core/panel-next/package-lock.json
+      # The core uses POSIX locks. On Windows the browser and panel stay native; only the core's
+      # API runs in WSL. WSL1 shares localhost with Windows and does not require nested virtualization.
+      - name: Install WSL for the core API
+        if: ${{ runner.os == 'Windows' }}
+        uses: Vampire/setup-wsl@4c48163d9f981914dd8caa0fc335fe19cca5bff4 # v7
+        with:
+          distribution: Ubuntu-24.04
+          wsl-version: 1
+          additional-packages: python3 python3-venv python3-pip git
+      - name: Install panel dependencies
+        working-directory: ci-core/panel-next
+        run: npm run setup
+      - name: Install Chromium
+        working-directory: ci-core/panel-next
+        run: npx playwright install --with-deps chromium
+      - name: Build the production panel
+        working-directory: ci-core/panel-next
+        run: npm run build
+      - name: Exercise the panel through its rig and simulator
+        working-directory: ci-core/panel-next
+        run: node scripts/ci-e2e.mjs
+      - name: Retain browser failure artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-${{ matrix.os }}
+          path: ci-core/panel-next/test-results/
+          if-no-files-found: ignore
+
+  # Keep the ruleset's required context stable. A failed, skipped or cancelled platform or E2E
+  # run must never make this required check green.
+  check:
+    name: check
+    if: ${{ always() }}
+    needs: [platform, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require both platforms and both browser runs
+        env:
+          PLATFORM_RESULT: ${{ needs.platform.result }}
+          E2E_RESULT: ${{ needs.e2e.result }}
+        run: test "$PLATFORM_RESULT" = success && test "$E2E_RESULT" = success

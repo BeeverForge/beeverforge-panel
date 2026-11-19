@@ -37,6 +37,9 @@ test("what needs a person can be answered where it is shown", async ({ page }) =
 });
 
 test("the floor has no serious accessibility violation", async ({ page }) => {
+  // Live journal updates replace card details while axe scans. Respect reduced motion so a
+  // transient fade does not look like the settled text's contrast.
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await page.getByRole("region", { name: "Production lines" }).waitFor();
   expect(await seriousViolations(page)).toEqual([]);
