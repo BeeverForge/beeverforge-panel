@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: "es2022",
+      manifest: true,
       sourcemap: true,
     },
   };

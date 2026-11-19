@@ -1,6 +1,6 @@
 // Run the browser suite against the real core's API and the factory simulator. CI checks the
-// panel out under a pinned core checkout so the original rig's relative paths work. On Windows
-// rig.mjs runs the core in WSL; Node, Vite and Chromium run natively on Windows.
+// rig installs the core at contract/core-ref. On Windows rig.mjs runs the core in WSL;
+// Node, Vite and Chromium run natively on Windows.
 import { spawn } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
 
