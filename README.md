@@ -1,5 +1,7 @@
 # BeeverForge Panel
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution guidelines and checks.
+
 The BeeverForge panel, rebuilt in React. It is a client of the core
 ([BeeverForge/beeverforge-oss](https://github.com/BeeverForge/beeverforge-oss)) and uses its public
 front-end API only
