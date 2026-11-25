@@ -151,6 +151,10 @@
     transition: background var(--dur-2) var(--ease-out), border-color var(--dur-2);
   }
   .station[data-state="ahead"] {
+    border-color: color-mix(in srgb, var(--slot) 55%, transparent);
+    color: var(--text-2);
+  }
+  .station[data-state="ahead"] .mark {
     opacity: 0.55;
   }
   .station[data-state="passed"] {

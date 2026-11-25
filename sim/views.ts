@@ -140,6 +140,11 @@ export function inbox(f: Factory) {
       if (a.can_review) {
         options.splice(1, 0, { key: "review", label: "Re-review", consequence: "reads the pull request AS IT STANDS and replaces the verdict on this card — it changes no code, and it costs a model pass" });
       }
+      if (a.can_address && a.adjusts_left !== 0) {
+        options.splice(options.findIndex((o) => o.key === "adjust") + 1, 0, {
+          key: "address", label: "Address comments", consequence: "one more agent pass on the SAME branch and PR, against the review comments people left on it that still stand",
+        });
+      }
       out.push({ ...base, kind, options, answer: { method: "POST", url: "/api/act/<merge|adjust|address|discard|review>", body: { params: { project: j.project, issue: j.issue, instruction: "<adjust only>" } } } });
     } else if (j.state === "awaiting_prod_approval") {
       out.push({ ...base, kind, answer: { method: "POST", url: `/api/temporal/approve/${j.project}/${j.issue}` } });

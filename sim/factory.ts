@@ -382,7 +382,7 @@ export class Factory extends EventEmitter {
           auto: false,
           gate_live: true,
           can_review: true,
-          can_address: false,
+          can_address: job.outcome === "merge_comments",
           adjust_passes: 2,
           adjusts_left: Math.max(0, 2 - passes),
           auto_but_for_the_look: false,

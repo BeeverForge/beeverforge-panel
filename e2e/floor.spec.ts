@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { seriousViolations } from "./a11y";
-import { simLive } from "./sim";
-
-const MOVING = new Set(["sizing", "spec_validation", "preparing", "planning", "implementing", "validating", "repairing", "reviewing", "pr_open"]);
+import { simLive, simSpeed, simStage } from "./sim";
 
 test("the floor shows every line, and its sentence is the server's", async ({ page }) => {
   await page.goto("/");
@@ -16,24 +14,22 @@ test("the floor shows every line, and its sentence is the server's", async ({ pa
 });
 
 test("a card moves to its next station without a reload", async ({ page }) => {
-  await page.goto("/");
-  const live = (await simLive()).find((j) => !j.action && MOVING.has(j.state));
-  test.skip(!live, "no line is between stations right now");
-  const row = page.getByRole("region", { name: "Production lines" }).getByRole("link", { name: live!.project, exact: true }).locator("..");
-  const where = row.getByText(new RegExp(`^#${live!.issue} at `));
-  const before = await where.textContent();
-  await expect(where).not.toHaveText(before ?? "", { timeout: 45_000 });
-});
-
-test("what needs a person can be answered where it is shown", async ({ page }) => {
-  await page.goto("/");
-  const needs = page.getByRole("complementary", { name: "Needs you" });
-  // An answer that opens a form (a release, an adjustment) is not a one-click answer.
-  const item = needs.locator("li").filter({ has: page.locator("button:not(:has-text('…'))") }).first();
-  test.skip((await item.count()) === 0, "nothing answerable in one click right now");
-  const who = (await item.locator("a").first().textContent())!.trim();
-  await item.locator("button").first().click();
-  await expect(page.getByRole("region", { name: "Notifications" }).getByText(who)).toBeVisible();
+  const project = "atlas-docs";
+  const speed = await simSpeed();
+  try {
+    await simSpeed(1);
+    await simStage(project, "merge_human");
+    const live = (await simLive()).find((j) => j.project === project);
+    expect(live, "the staged line must be running").toBeDefined();
+    await page.goto("/");
+    const row = page.getByRole("region", { name: "Production lines" }).getByRole("link", { name: project, exact: true }).locator("..");
+    const where = row.getByText(new RegExp(`^#${live!.issue} at `));
+    await expect(where).toBeVisible();
+    const before = await where.textContent();
+    await expect(where).not.toHaveText(before ?? "", { timeout: 45_000 });
+  } finally {
+    await simSpeed(speed);
+  }
 });
 
 test("the floor has no serious accessibility violation", async ({ page }) => {

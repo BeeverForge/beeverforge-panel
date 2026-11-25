@@ -76,6 +76,7 @@ curl 127.0.0.1:8790/__sim                                  # what is live right 
 check; a test that needs one state uses it.
 
 Outcomes: `merge_human`, `merge_rejected` (the merge gate after the review rejected it),
+`merge_comments` (the gate offers to address forge comments),
 `merge_auto`, `decision`, `repair_then_merge`, `rate_limit`, `fail_hold`, `prod_approval`, `wedged`.
 The simulator keeps its runs in memory: restarting it puts the cards it was working on back to
 where the board holds them.
@@ -120,7 +121,8 @@ the engine's next frame for that job lands.
 CI runs installation, typecheck, lint, unit tests, the production build, the dependency policy and
 the Playwright suite on both Linux and Windows for each pull request. On Windows, the browser and
 panel run natively and the core API runs in WSL. Shellcheck runs on Linux. The required `check`
-passes only if both platforms and both browser runs succeed.
+passes only if both platforms and both browser runs succeed. The initial JavaScript budget includes
+the entry and all its static imports, separately gzipped: 165 KiB maximum (about 158 KiB today).
 
 ```bash
 npm run typecheck && npm run lint
@@ -128,6 +130,7 @@ npm test                # unit: the stream merge, the station model
 npm run e2e             # end to end against the simulator: the live floor, answering, the board,
                         # the product room, axe accessibility, phone widths (needs `npm start`)
 npm run build           # the production bundle in dist/
+npm run budget          # check the initial JavaScript after building
 ```
 
 ## Recording a demo
